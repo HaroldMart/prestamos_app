@@ -4,6 +4,7 @@ import 'screens/home.dart';
 import 'screens/loans.dart';
 import 'screens/calculator.dart';
 import 'screens/setttings.dart';
+import 'screens/auth/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 // import 'widgets/side_menu.dart';
 
@@ -56,12 +57,12 @@ class _HomeState extends State<Home> {
         title: const Text("Prestamos App"),
       ),
       // drawer: CustomDrawer.getDrawer(context),
-      body:
+      body: LoginScreen(),
       
-      IndexedStack(
-        index: indexPage,
-        children: pages
-        ),
+      // IndexedStack(
+      //   index: indexPage,
+      //   children: pages
+      //   ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: indexPage, 
         type: BottomNavigationBarType.fixed,
