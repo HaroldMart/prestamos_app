@@ -12,7 +12,20 @@
           "package_name": "com.example.prestamos_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "74006902989-30dkuora7l8hs8v91oa2cu7hukn9cbve.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.prestamos_app",
+            "certificate_hash": "53e194933059ae75e03e600db7e32e8fde06b5dd"
+          }
+        },
+        {
+          "client_id": "74006902989-rpm2u2bibqi2cj03lf01fh9h30r4eott.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA3DWcXPQcHNMsQF90Gd86gXTPa58Q1mdo"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "74006902989-rpm2u2bibqi2cj03lf01fh9h30r4eott.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
