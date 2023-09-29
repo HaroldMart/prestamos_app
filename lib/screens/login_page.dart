@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../auth/home.dart';
+import '../auth/signin_google.dart';
 import '../widgets/my_button.dart';
 import '../widgets/my_textfield.dart';
 import '../widgets/square_tile.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -88,6 +90,26 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
   }
+
+    Future<void> handleSignInWithGoogle() async {
+      try {
+        final User? user = await signInWithGoogle();
+
+        if (user != null) {
+          // El inicio de sesión con Google fue exitoso, realiza acciones adicionales aquí
+          // Navegar a la siguiente pantalla o realizar otras acciones
+
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) =>
+                  const Home(), // Reemplaza con el nombre de tu pantalla de inicio
+            ),
+          );
+        }
+      } catch (error) {
+        // Maneja errores aquí
+      }
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -191,16 +213,20 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 50),
 
               // google + apple sign in buttons
-              const Row(
+               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // google button
-                  SquareTile(imagePath: 'assets/google.png'),
+                  InkWell(
+                    onTap: () {
+                      handleSignInWithGoogle();},
+                      child: const SquareTile(
+                        imagePath: 'assets/google.png',
+                        )),
 
-                  SizedBox(width: 15),
+                  const SizedBox(width: 15),
 
                   // apple button
-                  SquareTile(imagePath: 'assets/apple.png')
+                  const SquareTile(imagePath: 'assets/apple.png')
                 ],
               ),
 
