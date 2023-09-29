@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/my_button.dart';
-import '../../widgets/my_textfield.dart';
-import '../../widgets/square_tile.dart';
+import '../widgets/my_button.dart';
+import '../widgets/my_textfield.dart';
+import '../widgets/square_tile.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
