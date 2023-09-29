@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "74006902989",
+    "project_id": "prestamosapp-67d35",
+    "storage_bucket": "prestamosapp-67d35.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:74006902989:android:cb65098c2a6e48bd0d9184",
+        "android_client_info": {
+          "package_name": "com.example.prestamos_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3DWcXPQcHNMsQF90Gd86gXTPa58Q1mdo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
