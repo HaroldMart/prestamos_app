@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:prestamos_app/screens/login_page.dart';
-import 'package:prestamos_app/screens/register_page.dart';
-import 'auth/auth.dart';
 import 'firebase_options.dart';
 
 void main() async {

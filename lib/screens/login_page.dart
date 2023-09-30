@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../auth/home.dart';
-import '../auth/signin_google.dart';
+import 'package:prestamos_app/screens/register_page.dart';
 import '../widgets/my_button.dart';
 import '../widgets/my_textfield.dart';
-import '../widgets/square_tile.dart';
+import '../widgets/signInWith.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -90,26 +89,6 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
   }
-
-    Future<void> handleSignInWithGoogle() async {
-      try {
-        final User? user = await signInWithGoogle();
-
-        if (user != null) {
-          // El inicio de sesión con Google fue exitoso, realiza acciones adicionales aquí
-          // Navegar a la siguiente pantalla o realizar otras acciones
-
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) =>
-                  const Home(), // Reemplaza con el nombre de tu pantalla de inicio
-            ),
-          );
-        }
-      } catch (error) {
-        // Maneja errores aquí
-      }
-    }
 
   @override
   Widget build(BuildContext context) {
@@ -212,40 +191,33 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 50),
 
-              // google + apple sign in buttons
-               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      handleSignInWithGoogle();},
-                      child: const SquareTile(
-                        imagePath: 'assets/google.png',
-                        )),
-
-                  const SizedBox(width: 15),
-
-                  // apple button
-                  const SquareTile(imagePath: 'assets/apple.png')
-                ],
-              ),
+              const SignInWith(),
 
               const SizedBox(height: 30),
 
-              // not a member? register now
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Not a member?',
+                    'No eres miembro?',
                     style: TextStyle(color: Colors.grey[700]),
                   ),
                   const SizedBox(width: 4),
-                  const Text(
-                    'Register now',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const RegisterPage(), 
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      '¡Regístrate ahora!',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],

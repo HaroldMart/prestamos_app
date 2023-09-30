@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:prestamos_app/screens/login_page.dart';
+import 'package:prestamos_app/widgets/signInWith.dart';
 import '../widgets/my_button.dart';
 import '../widgets/my_textfield.dart';
-import '../widgets/square_tile.dart';
 
 class RegisterPage extends StatefulWidget {
-
   const RegisterPage({Key? key}) : super(key: key);
 
   @override
@@ -88,34 +88,33 @@ class _RegisterPageState extends State<RegisterPage> {
                 hintText: 'Confirm Password',
                 obscureText: true,
               ),
-
               const SizedBox(height: 25),
               MyButton(
                 // text: "Sign Up",
                 onTap: () => _signUserup(context),
               ),
               const SizedBox(height: 40),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SquareTile(imagePath: 'assets/google.png'),
-                  SizedBox(width: 25),
-                  SquareTile(imagePath: 'assets/apple.png'),
-                ],
-              ),
+              const SignInWith(),
               const SizedBox(height: 50),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Already have an account',
+                    'Tienes una cuenta?',
                     style: TextStyle(color: Colors.grey[700]),
                   ),
                   const SizedBox(width: 4),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                       Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const LoginPage(),
+                        ),
+                      );
+                    },
                     child: const Text(
-                      'Login now',
+                      '!Inicia Sesión ahora!',
                       style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
