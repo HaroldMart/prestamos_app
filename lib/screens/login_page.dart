@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/screens/register_page.dart';
+import '../auth/home.dart';
 import '../widgets/my_button.dart';
 import '../widgets/my_textfield.dart';
 import '../widgets/signInWith.dart';
@@ -17,8 +18,16 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+    void showmessage(String errorMessage) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(title: Text(errorMessage));
+        });
+  }
+
   // sign user in method
-  void signUserIn() async {
+  Future<void> signUserIn() async {
     // show loading circle
     showDialog(
       context: context,
@@ -31,26 +40,31 @@ class _LoginPageState extends State<LoginPage> {
 
     // try sign in
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+
+
+      final userCredentials = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
-      // pop the loading circle
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      // pop the loading circle
-      Navigator.pop(context);
-      // WRONG EMAIL
-      if (e.code == 'user-not-found') {
-        // show error to user
-        wrongEmailMessage();
-      }
 
-      // WRONG PASSWORD
-      else if (e.code == 'wrong-password') {
-        // show error to user
-        wrongPasswordMessage();
+      print(userCredentials);
+      if(userCredentials != null) {
+         Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) =>
+                  const Home(),
+            ),
+          );
       }
+      
+    } on FirebaseAuthException catch (e) {
+      Navigator.pop(context);
+      //wrong Email
+      showmessage(e.code);
+    }
+    
+     catch (error) {
+      print(error);
     }
   }
 
@@ -100,16 +114,11 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 30),
-
-              // logo
               const Icon(
                 Icons.lock,
                 size: 100,
               ),
-
               const SizedBox(height: 40),
-
-              // welcome back, you've been missed!
               Text(
                 'Welcome back you\'ve been missed!',
                 style: TextStyle(
@@ -119,8 +128,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
 
               const SizedBox(height: 20),
-
-              // email textfield
               MyTextField(
                 controller: emailController,
                 hintText: 'Email',
@@ -129,7 +136,6 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 10),
 
-              // password textfield
               MyTextField(
                 controller: passwordController,
                 hintText: 'Password',
@@ -138,7 +144,6 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 10),
 
-              // forgot password?
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
@@ -151,17 +156,13 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 20),
 
-              // sign in button
               MyButton(
                 onTap: signUserIn,
               ),
-
               const SizedBox(height: 25),
 
-              // or continue with
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Row(
@@ -188,13 +189,9 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 50),
-
               const SignInWith(),
-
               const SizedBox(height: 30),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -207,8 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: () {
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) =>
-                              const RegisterPage(), 
+                          builder: (context) => const RegisterPage(),
                         ),
                       );
                     },
