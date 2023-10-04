@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:prestamos_app/screens/register_page.dart';
 import '../screens/login_page.dart';
 import 'home.dart';
 
@@ -18,7 +19,8 @@ class AuthPage extends StatelessWidget {
           }
           // user is NOT logged in
           else {
-            return const LoginPage();
+            // return const LoginPage();
+            return const RegisterPage();
           }
         },
       ),

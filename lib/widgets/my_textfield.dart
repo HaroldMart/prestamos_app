@@ -34,3 +34,48 @@ class MyTextField extends StatelessWidget {
     );
   }
 }
+
+class TextInput extends StatelessWidget {
+  final TextEditingController controller;
+  final String hintText;
+  final bool obscureText;
+  final IconData? icon;
+
+  const TextInput(
+      {super.key,
+      required this.controller,
+      this.hintText = '',
+      this.obscureText = false,
+      this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Container(
+        width: 350,
+        decoration: BoxDecoration(
+          color: const Color(0xFFEAEAEA),
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: TextField(
+          controller: controller,
+          obscureText: obscureText,
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: TextStyle(color: Colors.grey[500]),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 17.0),
+            border: InputBorder.none,
+            suffixIcon: icon != null
+                ? Icon(
+                    icon,
+                    color: const Color(0xFF858585),
+                  )
+                : null,
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -52,80 +52,133 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Center(
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              const SizedBox(height: 50),
-              const Icon(Icons.lock, size: 50),
-              const SizedBox(height: 50),
-              const Text(
-                'Create a new Account',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              MyTextField(
-                controller: _emailController,
-                hintText: 'Username',
-                obscureText: false,
-              ),
-              const SizedBox(height: 10),
-              MyTextField(
-                controller: _passwordController,
-                hintText: 'Password',
-                obscureText: true,
-              ),
-              const SizedBox(height: 10),
-              MyTextField(
-                controller: _confirmPasswordController,
-                hintText: 'Confirm Password',
-                obscureText: true,
-              ),
-              const SizedBox(height: 25),
-              MyButton(
-                // text: "Sign Up",
-                onTap: () => _signUserup(context),
-              ),
-              const SizedBox(height: 40),
-              const SignInWith(),
-              const SizedBox(height: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Tienes una cuenta?',
-                    style: TextStyle(color: Colors.grey[700]),
-                  ),
-                  const SizedBox(width: 4),
-                  GestureDetector(
-                    onTap: () {
-                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              const LoginPage(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      '!Inicia Sesión ahora!',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                      ),
+            child: ListView(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 166.22,
+                  height: 166.22,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/img/libro-de-arte.png'),
+                      fit: BoxFit.fill,
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
-        ),
+                ),
+                
+                const SizedBox(height: 52),
+                const Text(
+                  'Registro',
+                  style: TextStyle(
+                    color: Color(0xFF464E47),
+                    fontSize: 24,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w500,
+                    height: 0,
+                  ),
+                ),
+                
+                const SizedBox(height: 29),
+                TextInput(
+                  controller: _emailController,
+                  hintText: 'Correo Electronico',
+                ),
+                
+                const SizedBox(height: 17),
+                TextInput(
+                  controller: _passwordController,
+                  hintText: 'Contraseña',
+                ),
+                
+                const SizedBox(height: 17),
+                TextInput(
+                  controller: _confirmPasswordController,
+                  hintText: 'Confirmar Contraseña',
+                ),
+                
+                const SizedBox(height: 32),
+                MyButton(
+                  onTap: () => _signUserup(context),
+                  hintText: "Registrarse",
+                ),
+                
+                const SizedBox(height: 32),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          thickness: 0.5,
+                          color: Colors.grey[400],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Text(
+                          'Or continue with',
+                          style: TextStyle(color: Colors.grey[700]),
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          thickness: 0.5,
+                          color: Colors.grey[400],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                
+                const SizedBox(height: 40),
+                const SignInWith(),
+                
+                const SizedBox(height: 50),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Ya tienes una cuenta?',
+                      style: TextStyle(
+                        color: Color(0xFF464C52),
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        height: 0,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Inicia Sesión',
+                        style: TextStyle(
+                          color: Color(0xFF403EAF),
+                          fontSize: 16,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w500,
+                          height: 0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 50),
+              ],
+            ),
+          ],
+        )),
       ),
     );
   }
