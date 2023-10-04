@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-    void showmessage(String errorMessage) {
+  void showmessage(String errorMessage) {
     showDialog(
         context: context,
         builder: (context) {
@@ -40,30 +40,25 @@ class _LoginPageState extends State<LoginPage> {
 
     // try sign in
     try {
-
-
-      final userCredentials = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final userCredentials =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
 
       print(userCredentials);
-      if(userCredentials != null) {
-         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) =>
-                  const Home(),
-            ),
-          );
+      if (userCredentials != null) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const Home(),
+          ),
+        );
       }
-      
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       //wrong Email
       showmessage(e.code);
-    }
-    
-     catch (error) {
+    } catch (error) {
       print(error);
     }
   }
@@ -107,97 +102,95 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 30),
-              const Icon(
-                Icons.lock,
-                size: 100,
-              ),
-              const SizedBox(height: 40),
-              Text(
-                'Welcome back you\'ve been missed!',
-                style: TextStyle(
-                  color: Colors.grey[700],
-                  fontSize: 16,
+              Container(
+                width: 166.22,
+                height: 166.22,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/img/marketing.png'),
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
 
-              const SizedBox(height: 20),
-              MyTextField(
-                controller: emailController,
-                hintText: 'Email',
-                obscureText: false,
+              const SizedBox(height: 52),
+              const Text(
+                'Inicio de sesión',
+                style: TextStyle(
+                  color: Color(0xFF464E47),
+                  fontSize: 24,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w500,
+                  height: 0,
+                ),
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 29),
+              TextInput(
+                controller: emailController,
+                hintText: 'Correo Electronico',
+              ),
 
-              MyTextField(
+              const SizedBox(height: 17),
+              TextInput(
                 controller: passwordController,
-                hintText: 'Password',
+                hintText: 'Contraseña',
                 obscureText: true,
               ),
 
-              const SizedBox(height: 10),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Forgot Password?',
-                      style: TextStyle(color: Colors.grey[600]),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
+              const SizedBox(height: 32),
               MyButton(
                 onTap: signUserIn,
+                hintText: "Iniciar Sesión",
               ),
-              const SizedBox(height: 25),
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(
-                        'Or continue with',
-                        style: TextStyle(color: Colors.grey[700]),
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey[400],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 50),
-              const SignInWith(),
-              const SizedBox(height: 30),
+              // const SizedBox(height: 25),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              //   child: Row(
+              //     children: [
+              //       Expanded(
+              //         child: Divider(
+              //           thickness: 0.5,
+              //           color: Colors.grey[400],
+              //         ),
+              //       ),
+              //       Padding(
+              //         padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              //         child: Text(
+              //           'Or continue with',
+              //           style: TextStyle(color: Colors.grey[700]),
+              //         ),
+              //       ),
+              //       Expanded(
+              //         child: Divider(
+              //           thickness: 0.5,
+              //           color: Colors.grey[400],
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // const SizedBox(height: 50),
+              // const SignInWith(),
+              const SizedBox(height: 52),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'No eres miembro?',
-                    style: TextStyle(color: Colors.grey[700]),
+                  const Text(
+                    'No tienes una cuenta?',
+                    style: TextStyle(
+                      color: Color(0xFF464C52),
+                      fontSize: 16,
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w500,
+                      height: 0,
+                    ),
                   ),
                   const SizedBox(width: 4),
                   GestureDetector(
@@ -209,10 +202,13 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     },
                     child: const Text(
-                      '¡Regístrate ahora!',
+                      '¡Regístrate!',
                       style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF403EAF),
+                        fontSize: 16,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        height: 0,
                       ),
                     ),
                   ),
