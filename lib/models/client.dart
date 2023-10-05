@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'loan.dart';
-
 class Client {
   String name; // nombre
   String lastName; // apellido
@@ -9,12 +7,13 @@ class Client {
   String document; // cedula
   String direction;
 
-  Client(
-      {required this.name,
-      required this.lastName,
-      required this.phone,
-      required this.document,
-      required this.direction,});
+  Client({
+    required this.name,
+    required this.lastName,
+    required this.phone,
+    required this.document,
+    required this.direction,
+  });
 
   factory Client.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,

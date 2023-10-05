@@ -1,8 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/client.dart';
 
+//  FirebaseFirestore db = FirebaseFirestore.instance;
+//  final service = ClientService(db: db);
+
 class ClientService {
-  FirebaseFirestore db = FirebaseFirestore.instance;
+  FirebaseFirestore db;
+
+  ClientService({required this.db});
 
   Future<List> getAll() async {
     List clients = [];
@@ -21,7 +26,7 @@ class ClientService {
     return clients;
   }
 
-  Future<Client> getClient(clientId) async {
+  Future<Client> get(clientId) async {
     final docRef = db.collection("clients").doc(clientId);
 
     await docRef.get().then((DocumentSnapshot doc) {

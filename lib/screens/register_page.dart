@@ -69,7 +69,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                 ),
-                
                 const SizedBox(height: 52),
                 const Text(
                   'Registro',
@@ -81,31 +80,26 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 0,
                   ),
                 ),
-                
                 const SizedBox(height: 29),
                 TextInput(
                   controller: _emailController,
                   hintText: 'Correo Electronico',
                 ),
-                
                 const SizedBox(height: 17),
                 TextInput(
                   controller: _passwordController,
                   hintText: 'Contraseña',
                 ),
-                
                 const SizedBox(height: 17),
                 TextInput(
                   controller: _confirmPasswordController,
                   hintText: 'Confirmar Contraseña',
                 ),
-                
                 const SizedBox(height: 32),
                 MyButton(
                   onTap: () => _signUserup(context),
                   hintText: "Registrarse",
                 ),
-                
                 const SizedBox(height: 32),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -133,10 +127,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                 ),
-                
                 const SizedBox(height: 40),
                 const SignInWith(),
-                
                 const SizedBox(height: 50),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -173,7 +165,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 50),
               ],
             ),

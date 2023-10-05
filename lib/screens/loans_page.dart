@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/client.dart';
-import '../models/loan.dart';
+
 class LoansPage extends StatefulWidget {
-   const LoansPage({super.key});
+  const LoansPage({super.key});
 
   @override
   State<LoansPage> createState() => _LoansState();
@@ -11,21 +10,21 @@ class LoansPage extends StatefulWidget {
 class _LoansState extends State<LoansPage> {
   //  final loans = [
 
-  //   Client(name: "alma", lastName: "castillo", phone: 32423940023, 
-  //   document: 432495249520, nationality: "dominicano", 
+  //   Client(name: "alma", lastName: "castillo", phone: 32423940023,
+  //   document: 432495249520, nationality: "dominicano",
   //   direction: "calle su madrinasa, Santo domingo",
   //   loans: [
   //     Loan(client: "alma", mount: "40,000", interest: 10, monthlyPayment: 5000,
-  //   totalMonthlyPayment: 20, lateFee: 300, firstPayment: "2 de septiembre 2023", 
+  //   totalMonthlyPayment: 20, lateFee: 300, firstPayment: "2 de septiembre 2023",
   //   date: "2 de agosto 2023", paid: 0)
   //   ]),
 
-  //   Client(name: "mivida", lastName: "castillo", phone: 32423940023, 
-  //   document: 432495249520, nationality: "dominicano", 
+  //   Client(name: "mivida", lastName: "castillo", phone: 32423940023,
+  //   document: 432495249520, nationality: "dominicano",
   //   direction: "calle su madrinasa, Santo domingo",
   //   loans: [
   //     Loan(client: "alma", mount: "40,000", interest: 10, monthlyPayment: 5000,
-  //   totalMonthlyPayment: 20, lateFee: 300, firstPayment: "2 de septiembre 2023", 
+  //   totalMonthlyPayment: 20, lateFee: 300, firstPayment: "2 de septiembre 2023",
   //   date: "2 de agosto 2023", paid: 0)
   //   ])
   // ];
@@ -35,22 +34,22 @@ class _LoansState extends State<LoansPage> {
   //  String nationality = '';
   //  String mount = '';
   //  int interest = 0;
-  
+
   @override
   Widget build(BuildContext context) {
     return Text("clients");
-  //  return ListView.builder(itemCount:  loans.length, itemBuilder: (context, index) {
-  //      name = loans[index].name;
-  //      lastName = loans[index].lastName;
-  //      nationality = loans[index].nationality;
-  //      mount = loans[index].loans[0].mount;
-  //     interest = loans[index].loans[0].interest.toInt();
+    //  return ListView.builder(itemCount:  loans.length, itemBuilder: (context, index) {
+    //      name = loans[index].name;
+    //      lastName = loans[index].lastName;
+    //      nationality = loans[index].nationality;
+    //      mount = loans[index].loans[0].mount;
+    //     interest = loans[index].loans[0].interest.toInt();
 
-  //     return ListTile(
-  //       leading: const Icon(Icons.person),
-  //       title: Text("$name $lastName"),
-  //       subtitle: Text("Monto prestamo: $mount, $interest% de interes"),
-  //       );
-  //   });
+    //     return ListTile(
+    //       leading: const Icon(Icons.person),
+    //       title: Text("$name $lastName"),
+    //       subtitle: Text("Monto prestamo: $mount, $interest% de interes"),
+    //       );
+    //   });
   }
 }

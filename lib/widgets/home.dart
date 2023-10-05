@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:prestamos_app/services/client_service.dart';
+
 import '../screens/home_page.dart';
 import '../screens/setttings_page.dart';
 import '../screens/clients_page.dart';
@@ -22,8 +25,7 @@ class _HomeState extends State<Home> {
     const CalculatorPage(),
     const SettingsPage()
   ];
-  
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

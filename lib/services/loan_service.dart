@@ -1,8 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/loan.dart';
 
+//  FirebaseFirestore db = FirebaseFirestore.instance;
+//  final service = LoanService(db: db);
+
 class LoanService {
   FirebaseFirestore db = FirebaseFirestore.instance;
+
+  LoanService({
+    required this.db
+  });
 
   Future<List> getAll(clientId) async {
   final loans = [];
@@ -62,7 +69,7 @@ class LoanService {
       print("Added loan with ID: ${documentSnapshot.id}"));
 }
 
-  Future<void> updateLoan(clientId, loanId, clientName, mount, interest,
+  Future<void> update(clientId, loanId, clientName, mount, interest,
     monthlyPayment, totalMonthlyPayment, lateFee, date, payment) async {
   final docRef =
       db.collection("clients").doc(clientId).collection("loans").doc(loanId);
@@ -81,7 +88,7 @@ class LoanService {
       onError: (e) => print("Error updating document $e"));
 }
 
-  Future<void> deleteLoan(clientId, loanId) async {
+  Future<void> delete(clientId, loanId) async {
   final docRef =
       db.collection("clients").doc(clientId).collection("loans").doc(loanId);
 

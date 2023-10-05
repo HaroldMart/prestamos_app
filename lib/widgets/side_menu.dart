@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class DrawerItem {
@@ -6,11 +5,10 @@ class DrawerItem {
   IconData icon;
   DrawerItem(this.title, this.icon);
 }
- 
+
 class CustomDrawer {
- 
   static int selectedDrawerIndex = 1;
- 
+
   static final _drawerItems = [
     DrawerItem("Mi perfil", Icons.person),
     DrawerItem("Lista de clientes", Icons.people),
@@ -18,12 +16,12 @@ class CustomDrawer {
     DrawerItem("Caculadora", Icons.calculate),
     DrawerItem("Ajustes", Icons.settings)
   ];
- 
-  static _onTapDrawer(int itemPos, BuildContext context){
-    Navigator.pop(context); 
+
+  static _onTapDrawer(int itemPos, BuildContext context) {
+    Navigator.pop(context);
     selectedDrawerIndex = itemPos;
   }
- 
+
   static Widget getDrawer(BuildContext context) {
     List<Widget> drawerOptions = [];
 
@@ -36,13 +34,14 @@ class CustomDrawer {
         onTap: () => _onTapDrawer(i, context),
       ));
     }
- 
+
     // menu lateral
     return Drawer(
       child: Column(
         children: <Widget>[
           const UserAccountsDrawerHeader(
-              accountName: Text("Papa de kristiam"), accountEmail: Text("papideKris@gmail.com")),
+              accountName: Text("Papa de kristiam"),
+              accountEmail: Text("papideKris@gmail.com")),
           Column(children: drawerOptions)
         ],
       ),

@@ -64,8 +64,7 @@ class TextInput extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: TextStyle(color: Colors.grey[500]),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 17.0),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 17.0),
             border: InputBorder.none,
             suffixIcon: icon != null
                 ? Icon(
