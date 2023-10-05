@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/screens/login_page.dart';
-import 'package:prestamos_app/provider/firestore.dart'; // Asegúrate de importar tu pantalla de inicio de sesión
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -30,8 +29,8 @@ class HomePage extends StatelessWidget {
     // updateLoan("EeENXtwRfdd9ZPVURxo5", "h2zapDxq96klJVepM3yu", 20, "50,000");
     // deleteClient("fBxW5slARcT3kdw49PIK");
     // deleteLoan("EeENXtwRfdd9ZPVURxo5", "l6rKhHWJWctyFqYRo18E");
-    final mycliente = getClient("EeENXtwRfdd9ZPVURxo5");
-    print(mycliente);
+    // final mycliente = getClient("EeENXtwRfdd9ZPVURxo5");
+    // print(mycliente);
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
