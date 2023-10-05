@@ -1,14 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/client.dart';
 
-// FirebaseFirestore db = FirebaseFirestore.instance;
-
 class ClientService {
-  FirebaseFirestore db;
-
-  ClientService({
-    required this.db
-  });
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   Future<List> getAll() async {
     List clients = [];

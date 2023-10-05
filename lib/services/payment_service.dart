@@ -2,12 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/loan.dart';
 import '../models/payment.dart';
 
-// FirebaseFirestore db = FirebaseFirestore.instance;
-
 class Payment {
-  FirebaseFirestore db;
-
-  Payment({required this.db});
+  FirebaseFirestore db = FirebaseFirestore.instance;
 
   Future<List> getAll(clientId, loanId) async {
     final docRef = db

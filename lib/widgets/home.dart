@@ -17,12 +17,13 @@ class _HomeState extends State<Home> {
 
   final List<Widget> pages = [
     HomePage(),
-    const Loans(),
-    const Clients(),
-    const Calculator(),
-    const Settings()
+    const LoansPage(),
+    const ClientsPage(),
+    const CalculatorPage(),
+    const SettingsPage()
   ];
-
+  
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../models/client.dart';
 import '../models/loan.dart';
-class Loans extends StatefulWidget {
-   const Loans({super.key});
+class LoansPage extends StatefulWidget {
+   const LoansPage({super.key});
 
   @override
-  State<Loans> createState() => _LoansState();
+  State<LoansPage> createState() => _LoansState();
 }
 
-class _LoansState extends State<Loans> {
+class _LoansState extends State<LoansPage> {
   //  final loans = [
 
   //   Client(name: "alma", lastName: "castillo", phone: 32423940023, 
