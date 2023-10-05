@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/screens/login_page.dart';
-import 'package:prestamos_app/services/firestore_service.dart'; // Asegúrate de importar tu pantalla de inicio de sesión
+import 'package:prestamos_app/provider/firestore_service.dart'; // Asegúrate de importar tu pantalla de inicio de sesión
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});

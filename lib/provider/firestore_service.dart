@@ -88,18 +88,7 @@ Future<List> getAllLoans(clientId) async {
 }
 
 // Agrega nuevo prestamo
-Future<void> addLoan(clientId) async {
-  final loan = Loan(
-      clientId: clientId,
-      clientName: "alma",
-      mount: "40,000",
-      interest: 10,
-      monthlyPayment: 5000,
-      totalMonthlyPayment: 20,
-      lateFee: 300,
-      date: "2 de agosto 2023",
-      payment: 0);
-
+Future<void> addLoan(clientId, loan) async {
   final clientRef =
       db.collection("clients").doc(clientId).collection("loans").withConverter(
             fromFirestore: Loan.fromFirestore,
