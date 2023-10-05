@@ -9,7 +9,6 @@ class Client {
   int document; // cedula
   String nationality; // nacionalidad
   String direction;
-  List<Loan> loans;
 
   Client(
       {required this.name,
@@ -17,8 +16,7 @@ class Client {
       required this.phone,
       required this.document,
       required this.nationality,
-      required this.direction,
-      required this.loans});
+      required this.direction,});
 
   factory Client.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -31,8 +29,7 @@ class Client {
         phone: data?['phone'],
         document: data?['document'],
         nationality: data?['nationality'],
-        direction: data?['direction'],
-        loans: List.from(data?['loans']));
+        direction: data?['direction']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -43,7 +40,6 @@ class Client {
       "document": document,
       "nationality": nationality,
       "direction": direction,
-      "loans": loans,
     };
   }
 }
