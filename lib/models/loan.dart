@@ -5,8 +5,8 @@ class Loan {
   String clientName; // nombre del cliente
   String mount; // monto total a prestar
   double interest; // intereses del prestamo
-  int monthlyPayment; // cuotas mensuales
-  int totalMonthlyPayment; // total de cuotas mensuales
+  double monthlyPayment; // cuotas mensuales
+  double totalMonthlyPayment; // total de cuotas mensuales
   int lateFee; // mora a cobrar por si se pasa del limite de pago de una cuota
   String date; // fecha en que se realizo el prestamo
   double payment;

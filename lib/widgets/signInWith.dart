@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/widgets/square_tile.dart';
-import '../auth/home.dart';
+import '../widgets/home.dart';
 import '../auth/signin_google.dart';
 
 class SignInWith extends StatefulWidget {

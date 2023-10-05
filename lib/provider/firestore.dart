@@ -1,25 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/client.dart';
 import '../models/loan.dart';
+import '../models/payment.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
-
-// -------------------- Datos de Cliente --------------------
 
 // Trae todos los clientes
 Future<List> getAllClients() async {
   List clients = [];
 
-  await db.collection("clients").get().then(
+  final dbRef = await db.collection("clients");
+
+  dbRef.get().then(
     (querySnapshot) {
       for (var docSnapshot in querySnapshot.docs) {
         clients.add(docSnapshot.data());
       }
     },
-    onError: (e) => print("Error completing: $e"),
+    onError: (e) => print("Error getting clients: $e"),
   );
 
-  print(clients);
   return clients;
 }
 
@@ -31,33 +31,44 @@ Future<void> addClient(client) async {
       );
 
   await dbRef.add(client).then((documentSnapshot) => {
-        documentSnapshot
-            .collection("mivida")
-            .add({'name': "mividaaa", "hika": "klsk"}),
-        print("Added Data with ID: ${documentSnapshot.id}")
+        documentSnapshot.collection("clients").add(client),
+        print("Added client with ID: ${documentSnapshot.id}")
       });
 }
 
 // Trae datos de un cliente
-Future<String> getClient(clientId) async {
+Future<Client> getClient(clientId) async {
   final docRef = db.collection("clients").doc(clientId);
 
   await docRef.get().then((DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    print(data);
-    return data;
-  }, onError: (e) => print("error getting client document: $e"));
 
-  return "";
+    final client = Client(
+        name: data["name"],
+        lastName: data["lastname"],
+        phone: data["phone"],
+        document: data["document"],
+        direction: data["direction"]);
+
+    return client;
+  }, onError: (e) => print("Error getting client document: $e"));
+
+  return Client(name: "", lastName: "", phone: "", document: "", direction: "");
 }
 
 // Actualiza un cliente
-Future<void> updateClient(clientId, clientName, clientLastName) async {
+Future<void> updateClient(clientId, clientName, clientLastName, clientPhone,
+    clientDocument, clientDirection) async {
   final docRef = db.collection("clients").doc(clientId);
 
-  await docRef.update({"name": clientName, "lastName": clientLastName}).then(
-      (value) => print("DocumentSnapshot successfully updated!"),
-      onError: (e) => print("Error updating document $e"));
+  await docRef.update({
+    "name": clientName,
+    "lastName": clientLastName,
+    "phone": clientPhone,
+    "document": clientDocument,
+    "direction": clientDirection
+  }).then((value) => print("DocumentSnapshot successfully updated!"),
+      onError: (e) => print("Error updating client document $e"));
 }
 
 // Elimina un cliente
@@ -72,8 +83,9 @@ Future<void> deleteClient(clientId) async {
 
 // Trae todos los prestamos
 Future<List> getAllLoans(clientId) async {
-  final docRef = db.collection("clients").doc(clientId).collection("loans");
   final loans = [];
+
+  final docRef = db.collection("clients").doc(clientId).collection("loans");
 
   await docRef.get().then(
     (querySnapshot) {
@@ -83,7 +95,6 @@ Future<List> getAllLoans(clientId) async {
     },
     onError: (e) => print("Error completing: $e"),
   );
-  print(loans);
   return loans;
 }
 
@@ -96,30 +107,58 @@ Future<void> addLoan(clientId, loan) async {
           );
 
   await clientRef.add(loan).then((documentSnapshot) =>
-      print("Added Data with ID: ${documentSnapshot.id}"));
+      print("Added loan with ID: ${documentSnapshot.id}"));
 }
 
 // Trae datos de un prestamo
-Future<String> getLoan(clientId, loanId) async {
+Future<Loan> getLoan(clientId, loanId) async {
   final docRef =
       db.collection("clients").doc(clientId).collection("loans").doc(loanId);
 
   await docRef.get().then((DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    print(data);
-    return data;
+    final loan = Loan(
+        clientId: data["clientId"],
+        clientName: data["clientName"],
+        mount: data["mount"],
+        interest: data["interest"],
+        monthlyPayment: data["monthlyPayment"],
+        totalMonthlyPayment: data["totalMonthlyPayment"],
+        lateFee: data["lateFee"],
+        date: data["date"],
+        payment: data["payment"]);
+    return loan;
   }, onError: (e) => print("error getting loan document: $e"));
 
-  return "";
+  return Loan(
+      clientId: "",
+      clientName: "",
+      mount: "",
+      interest: 0.0,
+      monthlyPayment: 0.0,
+      totalMonthlyPayment: 0.0,
+      lateFee: 0,
+      date: "",
+      payment: 0.0);
 }
 
 // Actualiza un prestamo
-Future<void> updateLoan(clientId, loanId, interest, mount) async {
+Future<void> updateLoan(clientId, loanId, clientName, mount, interest,
+    monthlyPayment, totalMonthlyPayment, lateFee, date, payment) async {
   final docRef =
       db.collection("clients").doc(clientId).collection("loans").doc(loanId);
 
-  await docRef.update({"interest": interest, "mount": mount}).then(
-      (value) => print("DocumentSnapshot successfully updated!"),
+  await docRef.update({
+    "clientId": clientId,
+    "clientName": clientName,
+    "mount": mount,
+    "interest": interest,
+    "monthlyPayment": monthlyPayment,
+    "totalMonthlyPayment": totalMonthlyPayment,
+    "lateFee": lateFee,
+    "date": date,
+    "payment": payment
+  }).then((value) => print("DocumentSnapshot successfully updated!"),
       onError: (e) => print("Error updating document $e"));
 }
 
@@ -142,6 +181,7 @@ Future<List> getAllPayments(clientId, loanId) async {
       .collection("loans")
       .doc(loanId)
       .collection("payments");
+
   final payments = [];
 
   await docRef.get().then(
@@ -152,13 +192,12 @@ Future<List> getAllPayments(clientId, loanId) async {
     },
     onError: (e) => print("Error completing: $e"),
   );
-  print(payments);
   return payments;
 }
 
 // Agrega nuevo pago
 Future<void> addPayment(clientId, loanId, payment) async {
-  final clientRef = db
+  final loanRef = db
       .collection("clients")
       .doc(clientId)
       .collection("loans")
@@ -169,12 +208,12 @@ Future<void> addPayment(clientId, loanId, payment) async {
         toFirestore: (Loan loan, options) => loan.toFirestore(),
       );
 
-  await clientRef.add(payment).then((documentSnapshot) =>
-      print("Added Data with ID: ${documentSnapshot.id}"));
+  await loanRef.add(payment).then((documentSnapshot) =>
+      print("Added payment with ID: ${documentSnapshot.id}"));
 }
 
 // Trae datos de un pago
-Future<String> getPayment(clientId, loanId, paymentId) async {
+Future<Payment_> getPayment(clientId, loanId, paymentId) async {
   final docRef = db
       .collection("clients")
       .doc(clientId)
@@ -185,11 +224,14 @@ Future<String> getPayment(clientId, loanId, paymentId) async {
 
   await docRef.get().then((DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    print(data);
-    return data;
+
+    final payment = Payment_(
+        loanId: data["LoanId"], mount: data["mount"], date: data["date"]);
+
+    return payment;
   }, onError: (e) => print("error getting loan document: $e"));
 
-  return "";
+  return Payment_(loanId: "", mount: 0.0, date: "");
 }
 
 // Actualiza un pago
@@ -197,7 +239,7 @@ Future<void> updatePayment(clientId, loanId, mount, date) async {
   final docRef =
       db.collection("clients").doc(clientId).collection("loans").doc(loanId);
 
-  await docRef.update({"mount": mount, "date": date}).then(
+  await docRef.update({"loanId": loanId, "mount": mount, "date": date}).then(
       (value) => print("DocumentSnapshot successfully updated!"),
       onError: (e) => print("Error updating document $e"));
 }

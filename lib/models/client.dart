@@ -5,8 +5,8 @@ import 'loan.dart';
 class Client {
   String name; // nombre
   String lastName; // apellido
-  int phone; // numero de telefono
-  int document; // cedula
+  String phone; // numero de telefono
+  String document; // cedula
   String direction;
 
   Client(
