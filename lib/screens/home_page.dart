@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
       print("Error al cerrar sesión: $e");
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     //  addLoan("EeENXtwRfdd9ZPVURxo5");

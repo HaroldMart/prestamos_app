@@ -8,9 +8,8 @@ class Loan {
   int monthlyPayment; // cuotas mensuales
   int totalMonthlyPayment; // total de cuotas mensuales
   int lateFee; // mora a cobrar por si se pasa del limite de pago de una cuota
-  String firstPayment; // primer cuota de pago
   String date; // fecha en que se realizo el prestamo
-  int paid; // cuotas pagadas
+  double payment;
 
   Loan(
       {required this.clientId,
@@ -20,9 +19,8 @@ class Loan {
       required this.monthlyPayment,
       required this.totalMonthlyPayment,
       required this.lateFee,
-      required this.firstPayment,
       required this.date,
-      required this.paid});
+      required this.payment});
 
   factory Loan.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -30,16 +28,15 @@ class Loan {
   ) {
     final data = snapshot.data();
     return Loan(
-      clientId: data?['clientId'],
+        clientId: data?['clientId'],
         clientName: data?['clientName'],
         mount: data?['mount'],
         interest: data?['interest'],
         monthlyPayment: data?['monthlyPayment'],
         totalMonthlyPayment: data?['totalMonthlyPayment'],
         lateFee: data?['lateFee'],
-        firstPayment: data?['firstPayment'],
         date: data?['date'],
-        paid: data?['paid']);
+        payment: data?['payment']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -51,9 +48,8 @@ class Loan {
       "monthlyPayment": monthlyPayment,
       "totalMonthlyPayment": totalMonthlyPayment,
       "lateFee": lateFee,
-      "firstPayment": firstPayment,
       "date": date,
-      "paid": paid,
+      "payment": payment,
     };
   }
 }

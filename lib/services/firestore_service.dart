@@ -24,16 +24,7 @@ Future<List> getAllClients() async {
 }
 
 // Agrega un cliente
-Future<void> addClient() async {
-  final client = Client(
-    name: "izael",
-    lastName: "morrobel",
-    phone: 32423940023,
-    document: 432495249520,
-    nationality: "haitiano como en brawhl",
-    direction: "lejisimo, Santo domingo",
-  );
-
+Future<void> addClient(client) async {
   final dbRef = db.collection("clients").withConverter(
         fromFirestore: Client.fromFirestore,
         toFirestore: (Client client, options) => client.toFirestore(),
@@ -74,12 +65,12 @@ Future<void> deleteClient(clientId) async {
   final docRef = db.collection("clients").doc(clientId);
 
   await docRef.delete().then(
-      (doc) => print("Document deleted"),
-      onError: (e) => print("Error updating document $e"),
-    );
+        (doc) => print("Document deleted"),
+        onError: (e) => print("Error updating document $e"),
+      );
 }
 
-// Trae todos los prestamos 
+// Trae todos los prestamos
 Future<List> getAllLoans(clientId) async {
   final docRef = db.collection("clients").doc(clientId).collection("loans");
   final loans = [];
@@ -106,9 +97,8 @@ Future<void> addLoan(clientId) async {
       monthlyPayment: 5000,
       totalMonthlyPayment: 20,
       lateFee: 300,
-      firstPayment: "2 de septiembre 2023",
       date: "2 de agosto 2023",
-      paid: 0);
+      payment: 0);
 
   final clientRef =
       db.collection("clients").doc(clientId).collection("loans").withConverter(
@@ -122,8 +112,7 @@ Future<void> addLoan(clientId) async {
 
 // Trae datos de un prestamo
 Future<String> getLoan(clientId, loanId) async {
-  final docRef =
-      db.collection("clients").doc(clientId).collection("loans").doc(loanId);
+  final docRef = db.collection("clients").doc(clientId).collection("loans").doc(loanId);
 
   await docRef.get().then((DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
@@ -136,7 +125,8 @@ Future<String> getLoan(clientId, loanId) async {
 
 // Actualiza un prestamo
 Future<void> updateLoan(clientId, loanId, interest, mount) async {
-  final docRef = db.collection("clients").doc(clientId).collection("loans").doc(loanId);
+  final docRef =
+      db.collection("clients").doc(clientId).collection("loans").doc(loanId);
 
   await docRef.update({"interest": interest, "mount": mount}).then(
       (value) => print("DocumentSnapshot successfully updated!"),
@@ -145,10 +135,11 @@ Future<void> updateLoan(clientId, loanId, interest, mount) async {
 
 // Elimina un prestamo
 Future<void> deleteLoan(clientId, loanId) async {
-  final docRef = db.collection("clients").doc(clientId).collection("loans").doc(loanId);
+  final docRef =
+      db.collection("clients").doc(clientId).collection("loans").doc(loanId);
 
   await docRef.delete().then(
-      (doc) => print("Document deleted"),
-      onError: (e) => print("Error updating document $e"),
-    );
+        (doc) => print("Document deleted"),
+        onError: (e) => print("Error updating document $e"),
+      );
 }
