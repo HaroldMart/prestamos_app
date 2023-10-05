@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'loan.dart';
 
 class Client {
@@ -9,7 +11,39 @@ class Client {
   String direction;
   List<Loan> loans;
 
-  Client({required this.name, required this.lastName, required this.phone ,
-   required this.document, required this.nationality, 
-   required this.direction, required this.loans});
+  Client(
+      {required this.name,
+      required this.lastName,
+      required this.phone,
+      required this.document,
+      required this.nationality,
+      required this.direction,
+      required this.loans});
+
+  factory Client.fromFirestore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) {
+    final data = snapshot.data();
+    return Client(
+        name: data?['name'],
+        lastName: data?['lastName'],
+        phone: data?['phone'],
+        document: data?['document'],
+        nationality: data?['nationality'],
+        direction: data?['direction'],
+        loans: List.from(data?['loans']));
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      "name": name,
+      "lastName": lastName,
+      "phone": phone,
+      "document": document,
+      "nationality": nationality,
+      "direction": direction,
+      "loans": loans,
+    };
+  }
 }

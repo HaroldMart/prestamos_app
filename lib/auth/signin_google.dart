@@ -21,4 +21,5 @@ Future<User?> signInWithGoogle() async {
     print('Error al iniciar sesión con Google: $error');
     throw error;
   }
+  return null;
 }

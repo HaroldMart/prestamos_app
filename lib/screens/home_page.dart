@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:prestamos_app/screens/login_page.dart'; // Asegúrate de importar tu pantalla de inicio de sesión
+import 'package:prestamos_app/screens/login_page.dart';
+import 'package:prestamos_app/services/firestore_service.dart'; // Asegúrate de importar tu pantalla de inicio de sesión
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -19,9 +20,10 @@ class HomePage extends StatelessWidget {
       print("Error al cerrar sesión: $e");
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
+    //  addLoan("EeENXtwRfdd9ZPVURxo5");
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(

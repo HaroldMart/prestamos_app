@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../models/client.dart';
-import '../models/loan.dart';
-
 class Clients extends StatelessWidget {
   const Clients({super.key});
 
