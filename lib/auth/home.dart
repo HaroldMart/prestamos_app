@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
   final List<Widget> pages = [
     HomePage(),
     const Loans(),
-    const Clients(),
+    const ClientsPage(),
     const Calculator(),
     const Settings()
   ];
