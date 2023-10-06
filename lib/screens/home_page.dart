@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:prestamos_app/models/payment.dart';
 import 'package:prestamos_app/screens/login_page.dart';
 import 'package:prestamos_app/services/client_service.dart';
+import 'package:prestamos_app/services/loan_service.dart';
 import 'package:prestamos_app/services/payment_service.dart';
-
 import '../models/client.dart';
+import '../models/loan.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
@@ -28,30 +29,61 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //  addLoan("EeENXtwRfdd9ZPVURxo5");
-    // getLoan("EeENXtwRfdd9ZPVURxo5","h2zapDxq96klJVepM3yu");
-    // getAllLoans("EeENXtwRfdd9ZPVURxo5");
-    // updateClient("EeENXtwRfdd9ZPVURxo5", "izael", "mivida");
-    // updateLoan("EeENXtwRfdd9ZPVURxo5", "h2zapDxq96klJVepM3yu", 20, "50,000");
-    // deleteClient("fBxW5slARcT3kdw49PIK");
-    // deleteLoan("EeENXtwRfdd9ZPVURxo5", "l6rKhHWJWctyFqYRo18E");
-    // final mycliente = getClient("EeENXtwRfdd9ZPVURxo5");
-    // print(mycliente);
-    // FirebaseFirestore db = FirebaseFirestore.instance;
-    // final service = ClientService(db: db);
-    // final client = Client(
-    //   name: "mvida",
-    //   lastName: "suvida",
-    //   document: "03094830948",
-    //   address: "su calle",
-    //   phone: "89504583554"
-    // );
-    // final payment = Payment_(loanId: "h2zapDxq96klJVepM3yu", mount: 40444.5, date: "5 de diciembre");
-    // service.add("EeENXtwRfdd9ZPVURxo5", "h2zapDxq96klJVepM3yu", payment);
-    // service.add(client);
-    // service.update("FGVn85hLKr3UXd1wS2AF", "otravida", "qq", "03094830948", "su calle", "89504583554");
-    // final miop = service.getAll();
-    // print(miop.toString());
+
+    // void inventando() async {
+      // instancia de firebase
+  
+      // FirebaseFirestore db = FirebaseFirestore.instance;
+      // final service = PaymentService(db: db);
+
+      // payment methods --------
+      // final payment = Payment_(
+      //   loanId: "h2zapDxq96klJVepM3yu",
+      //   mount: 3000.4, 
+      //   date: "hoy");
+      // final miop = await service.getAll("EeENXtwRfdd9ZPVURxo5", "h2zapDxq96klJVepM3yu");  // miop.forEach((element) {print(element);});
+      // final miop = await service.get("EeENXtwRfdd9ZPVURxo5", "h2zapDxq96klJVepM3yu", "dh8a7z93cexWzsu8mFsk");  // print(miop.date);
+      // final miop = await service.add("EeENXtwRfdd9ZPVURxo5", "h2zapDxq96klJVepM3yu", payment); 
+      // final miop = await service.update("EeENXtwRfdd9ZPVURxo5", "h2zapDxq96klJVepM3yu", "fKV36bx0YxSsWbIyAYoQ", 400, "mivida");
+      // final miop = await service.delete("EeENXtwRfdd9ZPVURxo5", "h2zapDxq96klJVepM3yu", "PduKlwZZciy8TpqAYd4D");
+
+
+      // loan methods --------
+      //   final loan =  Loan(
+      //   clientId: "EeENXtwRfdd9ZPVURxo5",
+      //   clientName: "izael",
+      //   interest: 10,
+      //   date: "mivida",
+      //   mount: 304566,
+      //   payment: 0,
+      //   monthlyPayment: 300,
+      //   total: 4902,
+      //   totalMonthlyPayment: 10,
+      //   lateFee: 30
+      // );
+      // final miop = await service.getAll("EeENXtwRfdd9ZPVURxo5");  // miop.forEach((element) {print(element);});
+      // final miop = await service.get("EeENXtwRfdd9ZPVURxo5", "pCYMQVG4ooBfbsgSf7Hu");  // print(miop.clientName);
+      // final miop = await service.add("EeENXtwRfdd9ZPVURxo5", loan);
+      // final miop = await service.update("EeENXtwRfdd9ZPVURxo5", "h2zapDxq96klJVepM3yu", "izael", 304566, 10, 400, 20, 40000, 500, "no c", 200);
+      // final miop = await service.delete("EeENXtwRfdd9ZPVURxo5", "h2zapDxq96klJVepM3yu");
+     
+
+      // client methods --------
+      //   final client = Client(
+      //   name: "mvida",
+      //   lastName: "suvida",
+      //   document: "03094830948",
+      //   address: "su calle",
+      //   phone: "89504583554"
+      // );
+      // final miop = await service.getAll();  // miop.forEach((element) {print(element);});
+      // final miop = await service.get("EeENXtwRfdd9ZPVURxo5");  // print(miop.name);
+      // final miop = await service.update("3SMaB3U2APDv2ThFq7Ju", "izael", "oo", "09820394324", "33333", "la esquina");
+      // final miop = await service.delete("3SMaB3U2APDv2ThFq7Ju");
+    // }
+
+    // inventando();
+
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(

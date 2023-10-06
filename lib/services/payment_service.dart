@@ -8,28 +8,31 @@ import '../models/payment.dart';
 class PaymentService {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
-  PaymentService({
-    required this.db
-  });
+  PaymentService({required this.db});
 
   Future<List> getAll(clientId, loanId) async {
-    final docRef = db
+    final payments = [];
+    final loanRef = db
         .collection("clients")
         .doc(clientId)
         .collection("loans")
         .doc(loanId)
         .collection("payments");
 
-    final payments = [];
+    try {
+      await loanRef.get().then(
+        (querySnapshot) {
+          for (var docSnapshot in querySnapshot.docs) {
+            payments.add(docSnapshot.data());
+          }
+        },
+      );
 
-    await docRef.get().then(
-      (querySnapshot) {
-        for (var docSnapshot in querySnapshot.docs) {
-          payments.add(docSnapshot.data());
-        }
-      },
-      onError: (e) => print("Error completing: $e"),
-    );
+      print("Getting payments");
+    } catch (e) {
+      print("Error getting payments: $e");
+    }
+
     return payments;
   }
 
@@ -42,41 +45,59 @@ class PaymentService {
         .collection("payments")
         .doc(paymentId);
 
-    await docRef.get().then((DocumentSnapshot doc) {
+    try {
+      final doc = await docRef.get();
       final data = doc.data() as Map<String, dynamic>;
 
       final payment = Payment_(
-          loanId: data["LoanId"], mount: data["mount"], date: data["date"]);
+          loanId: data["loanId"], mount: data["mount"], date: data["date"]);
+
+      print("Getting payment document");
 
       return payment;
-    }, onError: (e) => print("error getting loan document: $e"));
+    } catch (e) {
+      print("Error getting payment document: $e");
+    }
 
     return Payment_(loanId: "", mount: 0.0, date: "");
   }
 
   Future<void> add(clientId, loanId, payment) async {
-    final loanRef = db
+    final paymentRef = db
         .collection("clients")
         .doc(clientId)
         .collection("loans")
         .doc(loanId)
         .collection("payments")
         .withConverter(
-          fromFirestore: Loan.fromFirestore,
-          toFirestore: (Loan loan, options) => loan.toFirestore(),
+          fromFirestore: Payment_.fromFirestore,
+          toFirestore: (Payment_ loan, options) => loan.toFirestore(),
         );
 
-    await loanRef.add(payment).then((documentSnapshot) =>
-        print("Added payment with ID: ${documentSnapshot.id}"));
+    try {
+      await paymentRef.add(payment).then((documentSnapshot) =>
+          print("Added payment with ID: ${documentSnapshot.id}"));
+    } catch (e) {
+      print("Error adding payment: $e");
+    }
   }
 
-  Future<void> update(clientId, loanId, mount, date) async {
-    final docRef =
-        db.collection("clients").doc(clientId).collection("loans").doc(loanId);
+  Future<void> update(clientId, loanId, paymentId, mount, date) async {
+    final docRef = db
+        .collection("clients")
+        .doc(clientId)
+        .collection("loans")
+        .doc(loanId)
+        .collection("payments")
+        .doc(paymentId);
 
-    await docRef.update({"loanId": loanId, "mount": mount, "date": date}).then(
-        (value) => print("DocumentSnapshot successfully updated!"),
-        onError: (e) => print("Error updating document $e"));
+    try {
+      await docRef
+          .update({"loanId": loanId, "mount": mount, "date": date}).then(
+              (value) => print("Payment updated"));
+    } catch (e) {
+      print("Error updating payment document $e");
+    }
   }
 
   Future<void> delete(clientId, loanId, paymentId) async {
@@ -88,9 +109,10 @@ class PaymentService {
         .collection("payments")
         .doc(paymentId);
 
-    await docRef.delete().then(
-          (doc) => print("Document deleted"),
-          onError: (e) => print("Error updating document $e"),
-        );
+    try {
+      await docRef.delete().then((doc) => print("Payment deleted"));
+    } catch (e) {
+      print("Error deleting payment $e");
+    }
   }
 }

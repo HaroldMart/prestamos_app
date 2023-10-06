@@ -6,7 +6,8 @@ class Loan {
   double mount; // monto total a prestar
   double interest; // intereses del prestamo
   double monthlyPayment; // cuotas mensuales
-  double totalMonthlyPayment; // total de cuotas mensuales
+  int totalMonthlyPayment; // total de cuotas mensuales
+  double total;
   int lateFee; // mora a cobrar por si se pasa del limite de pago de una cuota
   String date; // fecha en que se realizo el prestamo
   double payment;
@@ -18,6 +19,7 @@ class Loan {
       required this.interest,
       required this.monthlyPayment,
       required this.totalMonthlyPayment,
+      required this.total,
       required this.lateFee,
       required this.date,
       required this.payment});
@@ -34,6 +36,7 @@ class Loan {
         interest: data?['interest'],
         monthlyPayment: data?['monthlyPayment'],
         totalMonthlyPayment: data?['totalMonthlyPayment'],
+        total: data?['total'],
         lateFee: data?['lateFee'],
         date: data?['date'],
         payment: data?['payment']);
@@ -47,6 +50,7 @@ class Loan {
       "interest": interest,
       "monthlyPayment": monthlyPayment,
       "totalMonthlyPayment": totalMonthlyPayment,
+      "total": total,
       "lateFee": lateFee,
       "date": date,
       "payment": payment,

@@ -10,18 +10,20 @@ class ClientService {
   ClientService({required this.db});
 
   Future<List> getAll() async {
-    List clients = [];
-
+    final clients = [];
     final dbRef = db.collection("clients");
 
-    dbRef.get().then(
-      (querySnapshot) {
+    try {
+      await dbRef.get().then((querySnapshot) {
         for (var docSnapshot in querySnapshot.docs) {
           clients.add(docSnapshot.data());
         }
-      },
-      onError: (e) => print("Error getting clients: $e"),
-    );
+      });
+
+      print("Getting clients");
+    } catch (e) {
+      print("Error getting clients: $e");
+    }
 
     return clients;
   }
@@ -29,21 +31,31 @@ class ClientService {
   Future<Client> get(clientId) async {
     final docRef = db.collection("clients").doc(clientId);
 
-    await docRef.get().then((DocumentSnapshot doc) {
+    try {
+      final doc = await docRef.get();
       final data = doc.data() as Map<String, dynamic>;
 
       final client = Client(
-          name: data["name"],
-          lastName: data["lastname"],
-          phone: data["phone"],
-          document: data["document"],
-          address: data["address"]);
+        name: data["name"],
+        lastName: data["lastName"],
+        phone: data["phone"],
+        document: data["document"],
+        address: data["address"],
+      );
+
+      print("Getting client document");
 
       return client;
-    }, onError: (e) => print("Error getting client document: $e"));
-
-    return Client(
-        name: "", lastName: "", phone: "", document: "", address: "");
+    } catch (e) {
+      print("Error getting client document: $e");
+      return Client(
+        name: "",
+        lastName: "",
+        phone: "",
+        document: "",
+        address: "",
+      );
+    }
   }
 
   Future<void> add(client) async {
@@ -51,33 +63,38 @@ class ClientService {
           fromFirestore: Client.fromFirestore,
           toFirestore: (Client client, options) => client.toFirestore(),
         );
-
-    await dbRef.add(client).then((documentSnapshot) => {
-          documentSnapshot.collection("clients").add(client),
-          print("Added client with ID: ${documentSnapshot.id}")
-        });
+    try {
+      await dbRef.add(client).then((documentSnapshot) =>
+          print("Added client with ID: ${documentSnapshot.id}"));
+    } catch (e) {
+      print("Error adding client: $e");
+    }
   }
 
   Future<void> update(clientId, clientName, clientLastName, clientPhone,
       clientDocument, clientAddress) async {
     final docRef = db.collection("clients").doc(clientId);
 
-    await docRef.update({
-      "name": clientName,
-      "lastName": clientLastName,
-      "phone": clientPhone,
-      "document": clientDocument,
-      "address": clientAddress
-    }).then((value) => print("DocumentSnapshot successfully updated!"),
-        onError: (e) => print("Error updating client document $e"));
+    try {
+      await docRef.update({
+        "name": clientName,
+        "lastName": clientLastName,
+        "phone": clientPhone,
+        "document": clientDocument,
+        "address": clientAddress
+      }).then((value) => print("Client updated"));
+    } catch (e) {
+      print("Error updating client document $e");
+    }
   }
 
   Future<void> delete(clientId) async {
     final docRef = db.collection("clients").doc(clientId);
 
-    await docRef.delete().then(
-          (doc) => print("Document deleted"),
-          onError: (e) => print("Error updating document $e"),
-        );
+    try {
+      await docRef.delete().then((doc) => print("Client deleted"));
+    } catch (e) {
+      print("Error deleting client $e");
+    }
   }
 }
