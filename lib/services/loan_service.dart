@@ -49,7 +49,7 @@ class LoanService {
   return Loan(
       clientId: "",
       clientName: "",
-      mount: "",
+      mount: 0.0,
       interest: 0.0,
       monthlyPayment: 0.0,
       totalMonthlyPayment: 0.0,

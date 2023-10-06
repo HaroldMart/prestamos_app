@@ -5,14 +5,14 @@ class Client {
   String lastName; // apellido
   String phone; // numero de telefono
   String document; // cedula
-  String direction;
+  String address;
 
   Client({
     required this.name,
     required this.lastName,
     required this.phone,
     required this.document,
-    required this.direction,
+    required this.address,
   });
 
   factory Client.fromFirestore(
@@ -25,7 +25,7 @@ class Client {
         lastName: data?['lastName'],
         phone: data?['phone'],
         document: data?['document'],
-        direction: data?['direction']);
+        address: data?['address']);
   }
 
   Map<String, dynamic> toFirestore() {
@@ -34,7 +34,7 @@ class Client {
       "lastName": lastName,
       "phone": phone,
       "document": document,
-      "direction": direction,
+      "address": address,
     };
   }
 }

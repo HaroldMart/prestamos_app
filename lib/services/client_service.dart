@@ -37,13 +37,13 @@ class ClientService {
           lastName: data["lastname"],
           phone: data["phone"],
           document: data["document"],
-          direction: data["direction"]);
+          address: data["address"]);
 
       return client;
     }, onError: (e) => print("Error getting client document: $e"));
 
     return Client(
-        name: "", lastName: "", phone: "", document: "", direction: "");
+        name: "", lastName: "", phone: "", document: "", address: "");
   }
 
   Future<void> add(client) async {
@@ -59,7 +59,7 @@ class ClientService {
   }
 
   Future<void> update(clientId, clientName, clientLastName, clientPhone,
-      clientDocument, clientDirection) async {
+      clientDocument, clientAddress) async {
     final docRef = db.collection("clients").doc(clientId);
 
     await docRef.update({
@@ -67,7 +67,7 @@ class ClientService {
       "lastName": clientLastName,
       "phone": clientPhone,
       "document": clientDocument,
-      "direction": clientDirection
+      "address": clientAddress
     }).then((value) => print("DocumentSnapshot successfully updated!"),
         onError: (e) => print("Error updating client document $e"));
   }
