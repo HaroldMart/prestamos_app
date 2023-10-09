@@ -30,11 +30,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // void inventando() async {
+    void inventando() async {
       // instancia de firebase
-  
-      // FirebaseFirestore db = FirebaseFirestore.instance;
-      // final service = PaymentService(db: db);
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      final service = PaymentService(db: db);
+      final clientService = ClientService(db: db);
 
       // payment methods --------
       // final payment = Payment_(
@@ -76,13 +76,16 @@ class HomePage extends StatelessWidget {
       //   address: "su calle",
       //   phone: "89504583554"
       // );
-      // final miop = await service.getAll();  // miop.forEach((element) {print(element);});
-      // final miop = await service.get("EeENXtwRfdd9ZPVURxo5");  // print(miop.name);
-      // final miop = await service.update("3SMaB3U2APDv2ThFq7Ju", "izael", "oo", "09820394324", "33333", "la esquina");
-      // final miop = await service.delete("3SMaB3U2APDv2ThFq7Ju");
-    // }
+      // final clients = await clientService.getAll(); 
+      // clients.forEach((element) {
+      //   print(element);
+      // });
+      // final miop = await clientService.get("EeENXtwRfdd9ZPVURxo5");  // print(miop.name);
+      // final miop = await clientService.update("3SMaB3U2APDv2ThFq7Ju", "izael", "oo", "09820394324", "33333", "la esquina");
+      // final miop = await clientService.delete("3SMaB3U2APDv2ThFq7Ju");
+    };
 
-    // inventando();
+    inventando();
 
     return Scaffold(
       backgroundColor: Colors.grey[300],

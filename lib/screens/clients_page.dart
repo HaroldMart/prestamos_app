@@ -1,4 +1,8 @@
+import 'dart:ffi';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:prestamos_app/models/client.dart';
+import '../services/client_service.dart';
 
 class ClientsPage extends StatefulWidget {
   const ClientsPage({super.key});
@@ -9,20 +13,61 @@ class ClientsPage extends StatefulWidget {
 
 class _ClientsPageState extends State<ClientsPage> {
   final GlobalKey<FormState> _clientFormKey = GlobalKey<FormState>();
-  String name = '';
-  String lastName = '';
-  String phone = '';
-  String document = '';
-  String address = '';
+
+  FirebaseFirestore db = FirebaseFirestore.instance;
+  List clients = [];
+
+  getAllClients() async {
+    final service = ClientService(db: db);
+    final List<Client> data = await service.getAll();
+      
+    setState(() {
+      clients = data;
+    });
+  }
+
+  var client = Client(
+    name: '', 
+    lastName: '', 
+    phone: '', 
+    document: '', 
+    address: ''
+  );
 
   @override
   Widget build(BuildContext context) {
+
+    getAllClients();
+
     return Scaffold(
-      body: const Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: [],
-        ),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: ListView.builder(
+          itemCount: clients.length,
+          itemBuilder: (BuildContext context,int i){
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color.fromARGB(255, 222, 220, 220),
+                    spreadRadius: 4,
+                    blurRadius: 7,
+                    offset: Offset(0, 2),
+                  )
+                ]
+              ),
+              child: ListTile(
+                leading: const Icon(Icons.person),
+                title: Text('${clients[i].name} ${clients[i].lastName}'),
+                subtitle: Text('${clients[i].address}'),
+                trailing: const Icon(Icons.arrow_forward_ios),
+                onTap: (){},
+                onLongPress: (){},
+              ),
+            );
+          }),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -63,7 +108,7 @@ class _ClientsPageState extends State<ClientsPage> {
                         },
                         onSaved: (value) {
                           setState(() {
-                            name = value.toString();
+                            client.name = value.toString();
                           });
                         },
                       ),
@@ -84,7 +129,7 @@ class _ClientsPageState extends State<ClientsPage> {
                         },
                         onSaved: (value) {
                           setState(() {
-                            lastName = value.toString();
+                            client.lastName = value.toString();
                           });
                         },
                       ),
@@ -105,7 +150,7 @@ class _ClientsPageState extends State<ClientsPage> {
                         },
                         onSaved: (value) {
                           setState(() {
-                            phone = value.toString();
+                            client.phone = value.toString();
                           });
                         },
                       ),
@@ -126,7 +171,7 @@ class _ClientsPageState extends State<ClientsPage> {
                         },
                         onSaved: (value) {
                           setState(() {
-                            document = value.toString();
+                            client.document = value.toString();
                           });
                         },
                       ),
@@ -147,7 +192,7 @@ class _ClientsPageState extends State<ClientsPage> {
                         },
                         onSaved: (value) {
                           setState(() {
-                            address = value.toString();
+                            client.address = value.toString();
                           });
                         },
                       ),
@@ -172,8 +217,18 @@ class _ClientsPageState extends State<ClientsPage> {
                                 setState(() {
                                   if (_clientFormKey.currentState!.validate()) {
                                     _clientFormKey.currentState!.save();
+                                    
+                                    final service = ClientService(db: db);
+                                    service.add(client);
+                                    
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('Cliente agregado exitosamente.')),
+                                    );
                                     Navigator.of(context).pop();
                                   }
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('Error al agregar cliente.')),
+                                  );
                                 });
                               },
                               child: const Text('Aceptar'))
