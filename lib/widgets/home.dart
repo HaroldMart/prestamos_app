@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:prestamos_app/services/client_service.dart';
+
 import '../screens/home_page.dart';
 import '../screens/setttings_page.dart';
 import '../screens/clients_page.dart';
@@ -17,10 +20,10 @@ class _HomeState extends State<Home> {
 
   final List<Widget> pages = [
     HomePage(),
-    const Loans(),
-    const Clients(),
-    const Calculator(),
-    const Settings()
+    const LoansPage(),
+    const ClientsPage(),
+    const CalculatorPage(),
+    const SettingsPage()
   ];
 
   @override

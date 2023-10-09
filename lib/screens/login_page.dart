@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/screens/register_page.dart';
-import '../auth/home.dart';
+import '../widgets/home.dart';
 import '../widgets/my_button.dart';
 import '../widgets/my_textfield.dart';
 

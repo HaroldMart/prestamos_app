@@ -66,8 +66,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '74006902989',
     projectId: 'prestamosapp-67d35',
     storageBucket: 'prestamosapp-67d35.appspot.com',
-    androidClientId: '74006902989-30dkuora7l8hs8v91oa2cu7hukn9cbve.apps.googleusercontent.com',
-    iosClientId: '74006902989-kjd4820oj9ekuptbppp98ks9pgid9k22.apps.googleusercontent.com',
+    androidClientId:
+        '74006902989-30dkuora7l8hs8v91oa2cu7hukn9cbve.apps.googleusercontent.com',
+    iosClientId:
+        '74006902989-kjd4820oj9ekuptbppp98ks9pgid9k22.apps.googleusercontent.com',
     iosBundleId: 'com.example.prestamosApp',
   );
 
@@ -77,8 +79,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '74006902989',
     projectId: 'prestamosapp-67d35',
     storageBucket: 'prestamosapp-67d35.appspot.com',
-    androidClientId: '74006902989-30dkuora7l8hs8v91oa2cu7hukn9cbve.apps.googleusercontent.com',
-    iosClientId: '74006902989-va259s2hcl60idkvvfmahv88bn31pbr4.apps.googleusercontent.com',
+    androidClientId:
+        '74006902989-30dkuora7l8hs8v91oa2cu7hukn9cbve.apps.googleusercontent.com',
+    iosClientId:
+        '74006902989-va259s2hcl60idkvvfmahv88bn31pbr4.apps.googleusercontent.com',
     iosBundleId: 'com.example.prestamosApp.RunnerTests',
   );
 }
