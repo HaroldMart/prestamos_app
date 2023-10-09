@@ -45,27 +45,34 @@ class _ClientsPageState extends State<ClientsPage> {
         child: ListView.builder(
           itemCount: clients.length,
           itemBuilder: (BuildContext context,int i){
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(255, 222, 220, 220),
-                    spreadRadius: 4,
-                    blurRadius: 7,
-                    offset: Offset(0, 2),
-                  )
-                ]
-              ),
-              child: ListTile(
-                leading: const Icon(Icons.person),
-                title: Text('${clients[i].name} ${clients[i].lastName}'),
-                subtitle: Text('${clients[i].address}'),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: (){},
-                onLongPress: (){},
-              ),
+            return Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color.fromARGB(255, 222, 220, 220),
+                        spreadRadius: 4,
+                        blurRadius: 7,
+                        offset: Offset(0, 2),
+                      )
+                    ]
+                  ),
+                  child: ListTile(
+                    leading: const Icon(Icons.person),
+                    title: Text('${clients[i].name} ${clients[i].lastName}'),
+                    subtitle: Text('${clients[i].address}'),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    onTap: (){
+                      
+                    },
+                    onLongPress: (){},
+                  ),
+                ),
+                const SizedBox(height: 15),
+              ],
             );
           }),
       ),
