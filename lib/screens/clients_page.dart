@@ -1,11 +1,10 @@
-import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/models/client.dart';
 import '../services/client_service.dart';
 
 class ClientsPage extends StatefulWidget {
-  const ClientsPage({super.key});
+  const ClientsPage({Key? key}) : super(key: key);
 
   @override
   State<ClientsPage> createState() => _ClientsPageState();
@@ -13,74 +12,57 @@ class ClientsPage extends StatefulWidget {
 
 class _ClientsPageState extends State<ClientsPage> {
   final GlobalKey<FormState> _clientFormKey = GlobalKey<FormState>();
-
   FirebaseFirestore db = FirebaseFirestore.instance;
-  List clients = [];
+  late List<Client> clients;
+  late Client client; 
 
-  getAllClients() async {
+  @override
+  void initState() {
+    super.initState();
+    getAllClients();
+  }
+
+  Future<void> getAllClients() async {
     final service = ClientService(db: db);
     final List<Client> data = await service.getAll();
-      
+
     setState(() {
       clients = data;
     });
   }
 
-  var client = Client(
-    name: '', 
-    lastName: '', 
-    phone: '', 
-    document: '', 
-    address: ''
-  );
-
   @override
   Widget build(BuildContext context) {
-
-    getAllClients();
-
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: ListView.builder(
-          itemCount: clients.length,
-          itemBuilder: (BuildContext context,int i){
-            return Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromARGB(255, 222, 220, 220),
-                        spreadRadius: 4,
-                        blurRadius: 7,
-                        offset: Offset(0, 2),
-                      )
-                    ]
-                  ),
-                  child: ListTile(
-                    leading: const Icon(Icons.person),
-                    title: Text('${clients[i].name} ${clients[i].lastName}'),
-                    subtitle: Text('${clients[i].address}'),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: (){
-                      
-                    },
-                    onLongPress: (){},
-                  ),
+      body: clients == null
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : clients.isEmpty
+              ? const Center(
+                  child: Text('No hay clientes disponibles.'),
+                )
+              : ListView.builder(
+                  itemCount: clients.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: Text('${clients[index].name} ${clients[index].lastName}'),
+                      subtitle: Text(clients[index].address),
+                      onTap: () {
+                        // Agregar aquí la lógica para manejar la selección de un cliente.
+                      },
+                      onLongPress: () {
+                        // Agregar aquí la lógica para manejar la pulsación larga en un cliente.
+                      },
+                    );
+                  },
                 ),
-                const SizedBox(height: 15),
-              ],
-            );
-          }),
-      ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _dialogBuilder(context);
-          },
-          child: const Icon(Icons.add)),
+        onPressed: () {
+          _dialogBuilder(context);
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 
