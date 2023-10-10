@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Client {
-  String name; // nombre
-  String lastName; // apellido
-  String phone; // numero de telefono
+  String? id;
+  String name;
+  String lastName;
+  String phone;
   String document; // cedula
   String address;
 
   Client({
+    this.id,
     required this.name,
     required this.lastName,
     required this.phone,
@@ -21,6 +23,7 @@ class Client {
   ) {
     final data = snapshot.data();
     return Client(
+        id: data?['id'],
         name: data?['name'],
         lastName: data?['lastName'],
         phone: data?['phone'],
@@ -30,6 +33,7 @@ class Client {
 
   Map<String, dynamic> toFirestore() {
     return {
+      "id": id,
       "name": name,
       "lastName": lastName,
       "phone": phone,

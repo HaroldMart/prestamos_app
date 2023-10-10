@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Loan {
   String clientId;
-  String clientName; // nombre del cliente
+  String clientName;
   double mount; // monto total a prestar
   double interest; // intereses del prestamo
   double monthlyPayment; // cuotas mensuales
