@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/loan.dart';
 import '../models/payment.dart';
 
 //  FirebaseFirestore db = FirebaseFirestore.instance;
@@ -10,8 +9,8 @@ class PaymentService {
 
   PaymentService({required this.db});
 
-  Future<List> getAll(clientId, loanId) async {
-    final payments = [];
+  Future<List<Payment_>> getAll(String clientId, String loanId) async {
+    final List<Payment_> payments = [];
     final loanRef = db
         .collection("clients")
         .doc(clientId)
@@ -23,7 +22,13 @@ class PaymentService {
       await loanRef.get().then(
         (querySnapshot) {
           for (var docSnapshot in querySnapshot.docs) {
-            payments.add(docSnapshot.data());
+            var paymentData = docSnapshot.data();
+            var payment = Payment_(
+                loanId: paymentData['loanId'],
+                mount: paymentData['mount'],
+                date: paymentData['date']);
+
+            payments.add(payment);
           }
         },
       );
@@ -36,7 +41,7 @@ class PaymentService {
     return payments;
   }
 
-  Future<Payment_> get(clientId, loanId, paymentId) async {
+  Future<Payment_> get(String clientId, String loanId, String paymentId) async {
     final docRef = db
         .collection("clients")
         .doc(clientId)
@@ -62,7 +67,7 @@ class PaymentService {
     return Payment_(loanId: "", mount: 0.0, date: "");
   }
 
-  Future<void> add(clientId, loanId, payment) async {
+  Future<void> add(String clientId, String loanId, Payment_ payment) async {
     final paymentRef = db
         .collection("clients")
         .doc(clientId)
@@ -82,7 +87,8 @@ class PaymentService {
     }
   }
 
-  Future<void> update(clientId, loanId, paymentId, mount, date) async {
+  Future<void> update(String clientId, String loanId, String paymentId,
+      double mount, String date) async {
     final docRef = db
         .collection("clients")
         .doc(clientId)
@@ -100,7 +106,7 @@ class PaymentService {
     }
   }
 
-  Future<void> delete(clientId, loanId, paymentId) async {
+  Future<void> delete(String clientId, String loanId, String paymentId) async {
     final docRef = db
         .collection("clients")
         .doc(clientId)

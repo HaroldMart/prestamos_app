@@ -14,29 +14,31 @@ class ClientService {
     final dbRef = db.collection("clients");
 
     try {
-        await dbRef.get().then((querySnapshot) {
-          for (var docSnapshot in querySnapshot.docs) {
-            // Convierte el mapa en un objeto Client
-            var clientData = docSnapshot.data();
-            var client = Client(
-              id: clientData['id'],
-              name: clientData['name'],
-              lastName: clientData['lastName'],
-              phone: clientData['phone'],
-              document: clientData['document'],
-              address: clientData['address'],
-            );
-            clients.add(client);
-          }
+      await dbRef.get().then((querySnapshot) {
+        for (var docSnapshot in querySnapshot.docs) {
+          var clientData = docSnapshot.data();
+          var client = Client(
+            id: clientData['id'],
+            idUser: clientData['idUser'],
+            name: clientData['name'],
+            lastName: clientData['lastName'],
+            phone: clientData['phone'],
+            document: clientData['document'],
+            address: clientData['address'],
+          );
+          clients.add(client);
+        }
       });
+
       print("Getting clients");
     } catch (e) {
       print("Error getting clients: $e");
     }
+
     return clients;
   }
 
-  Future<Client> get(clientId) async {
+  Future<Client> get(String clientId) async {
     final docRef = db.collection("clients").doc(clientId);
 
     try {
@@ -45,17 +47,23 @@ class ClientService {
 
       final client = Client(
         id: data['id'],
+        idUser: data['idUser'],
         name: data["name"],
         lastName: data["lastName"],
         phone: data["phone"],
         document: data["document"],
         address: data["address"],
       );
+
       print('Getting client.');
+
       return client;
     } catch (e) {
       print("Error getting client document: $e");
+
       return Client(
+        id: "",
+        idUser: "",
         name: "",
         lastName: "",
         phone: "",
@@ -72,20 +80,22 @@ class ClientService {
         );
     try {
       await dbRef.add(client).then((documentSnapshot) => {
-        documentSnapshot.update({'id': documentSnapshot.id}),
-        print("Added client with ID: ${documentSnapshot.id}"),
-      });
+            documentSnapshot.update({'id': documentSnapshot.id}),
+            print("Added client with ID: ${documentSnapshot.id}"),
+          });
     } catch (e) {
       print("Error adding client: $e");
     }
   }
 
-  Future<void> update(clientId, clientName, clientLastName, clientPhone,clientDocument, clientAddress) async {
+  Future<void> update(String clientId, String userId, String clientName, String clientLastName,
+      String clientPhone, String clientDocument, String clientAddress) async {
     final docRef = db.collection("clients").doc(clientId);
 
     try {
       await docRef.update({
         "id": clientId,
+        "idUser": userId,
         "name": clientName,
         "lastName": clientLastName,
         "phone": clientPhone,
@@ -97,7 +107,7 @@ class ClientService {
     }
   }
 
-  Future<void> delete(clientId) async {
+  Future<void> delete(String clientId) async {
     final docRef = db.collection("clients").doc(clientId);
 
     try {

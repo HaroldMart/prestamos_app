@@ -31,6 +31,8 @@ class _ClientsPageState extends State<ClientsPage> {
     });
   }
 
+  String direccionDefault = "no c"; // e que me decia error porque puede ser null xd
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +49,7 @@ class _ClientsPageState extends State<ClientsPage> {
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
                       title: Text('${clients[index].name} ${clients[index].lastName}'),
-                      subtitle: Text(clients[index].address),
+                      subtitle: Text(clients[index].address ?? direccionDefault),
                       onTap: () {
                         // Agregar aquí la lógica para manejar la selección de un cliente.
                       },

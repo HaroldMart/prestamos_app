@@ -2,27 +2,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Loan {
   String clientId;
-  String clientName;
   double mount; // monto total a prestar
-  double interest; // intereses del prestamo
+  double? interest; // intereses del prestamo
   double monthlyPayment; // cuotas mensuales
-  int totalMonthlyPayment; // total de cuotas mensuales
+  double totalMonthlyPayment; // total de cuotas mensuales
   double total;
-  int lateFee; // mora a cobrar por si se pasa del limite de pago de una cuota
+  int? lateFee; // mora a cobrar por si se pasa del limite de pago de una cuota
   String date; // fecha en que se realizo el prestamo
-  double payment;
+  bool isPaid; // si es true, el prestamo ya se pago por completo, de lo contrario es false
 
   Loan(
       {required this.clientId,
-      required this.clientName,
       required this.mount,
-      required this.interest,
+      this.interest,
       required this.monthlyPayment,
       required this.totalMonthlyPayment,
       required this.total,
-      required this.lateFee,
+      this.lateFee,
       required this.date,
-      required this.payment});
+      required this.isPaid});
 
   factory Loan.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -31,7 +29,6 @@ class Loan {
     final data = snapshot.data();
     return Loan(
         clientId: data?['clientId'],
-        clientName: data?['clientName'],
         mount: data?['mount'],
         interest: data?['interest'],
         monthlyPayment: data?['monthlyPayment'],
@@ -39,13 +36,12 @@ class Loan {
         total: data?['total'],
         lateFee: data?['lateFee'],
         date: data?['date'],
-        payment: data?['payment']);
+        isPaid: data?['isPaid']);
   }
 
   Map<String, dynamic> toFirestore() {
     return {
       "clientId": clientId,
-      "clientName": clientName,
       "mount": mount,
       "interest": interest,
       "monthlyPayment": monthlyPayment,
@@ -53,7 +49,7 @@ class Loan {
       "total": total,
       "lateFee": lateFee,
       "date": date,
-      "payment": payment,
+      "isPaid": isPaid,
     };
   }
 }
