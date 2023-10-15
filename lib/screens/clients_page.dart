@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/models/client.dart';
+import 'package:prestamos_app/screens/client_profile_page.dart';
 import '../services/client_service.dart';
 
 class ClientsPage extends StatefulWidget {
@@ -14,7 +15,7 @@ class _ClientsPageState extends State<ClientsPage> {
   final GlobalKey<FormState> _clientFormKey = GlobalKey<FormState>();
   FirebaseFirestore db = FirebaseFirestore.instance;
   late List<Client> clients;
-  late Client client; 
+  late Client client;
 
   @override
   void initState() {
@@ -31,16 +32,13 @@ class _ClientsPageState extends State<ClientsPage> {
     });
   }
 
-  String direccionDefault = "no c"; // e que me decia error porque puede ser null xd
+  String direccionDefault =
+      "no c"; // e que me decia error porque puede ser null xd
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: clients == null
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : clients.isEmpty
+      body: clients.isEmpty
               ? const Center(
                   child: Text('No hay clientes disponibles.'),
                 )
@@ -48,10 +46,15 @@ class _ClientsPageState extends State<ClientsPage> {
                   itemCount: clients.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                      title: Text('${clients[index].name} ${clients[index].lastName}'),
-                      subtitle: Text(clients[index].address ?? direccionDefault),
-                      onTap: () {
-                        // Agregar aquí la lógica para manejar la selección de un cliente.
+                      title: Text(
+                          '${clients[index].name} ${clients[index].lastName}'),
+                      subtitle:
+                          Text(clients[index].address ?? direccionDefault),
+                      onTap: () { 
+                        // Envia el objeto de cliente del array a la página de perfil del cliente.
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                ClientProfilePage(clients[index])));
                       },
                       onLongPress: () {
                         // Agregar aquí la lógica para manejar la pulsación larga en un cliente.
@@ -63,7 +66,7 @@ class _ClientsPageState extends State<ClientsPage> {
         onPressed: () {
           _dialogBuilder(context);
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -200,25 +203,32 @@ class _ClientsPageState extends State<ClientsPage> {
                               child: const Text('Cancelar')),
                           FilledButton(
                               style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: const BorderSide(color: Colors.green)))),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18.0),
+                                          side: const BorderSide(
+                                              color: Colors.green)))),
                               onPressed: () {
                                 setState(() {
                                   if (_clientFormKey.currentState!.validate()) {
                                     _clientFormKey.currentState!.save();
-                                    
+
                                     final service = ClientService(db: db);
                                     service.add(client);
-                                    
+
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Cliente agregado exitosamente.')),
+                                      const SnackBar(
+                                          content: Text(
+                                              'Cliente agregado exitosamente.')),
                                     );
                                     Navigator.of(context).pop();
                                   }
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Error al agregar cliente.')),
+                                    const SnackBar(
+                                        content:
+                                            Text('Error al agregar cliente.')),
                                   );
                                 });
                               },
