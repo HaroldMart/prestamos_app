@@ -10,7 +10,7 @@ class LoanService {
   LoanService({required this.db});
 
   Future<List<Loan>> getAll(String clientId) async {
-    final List<Loan> loans = [];
+    List<Loan> loans = [];
     final clientRef =
         db.collection("clients").doc(clientId).collection("loans");
 
@@ -49,6 +49,7 @@ class LoanService {
 
       final loan = Loan(
           clientId: data["clientId"],
+          id: data["id"],
           mount: data["mount"],
           interest: data["interest"],
           monthlyPayment: data["monthlyPayment"],
@@ -60,7 +61,6 @@ class LoanService {
       print("Getting loan document");
 
       return loan;
-
     } catch (e) {
       print("Error getting loan document: $e");
     }
@@ -88,22 +88,33 @@ class LoanService {
         );
 
     try {
-      await clientRef.add(loan).then((documentSnapshot) =>
-          print("Added loan with ID: ${documentSnapshot.id}"));
-
+      await clientRef.add(loan).then((documentSnapshot) => {
+            documentSnapshot.update({"id": documentSnapshot.id}),
+            print("Added loan with ID: ${documentSnapshot.id}")
+          });
     } catch (e) {
       print("Error adding loan: $e");
     }
   }
 
-  Future<void> update(String clientId, String loanId, double mount, double interest,
-      double monthlyPayment, double totalMonthlyPayment, double total, int lateFee, String date, bool isPaid) async {
+  Future<void> update(
+      String clientId,
+      String loanId,
+      double mount,
+      double interest,
+      double monthlyPayment,
+      double totalMonthlyPayment,
+      double total,
+      int lateFee,
+      String date,
+      bool isPaid) async {
     final docRef =
         db.collection("clients").doc(clientId).collection("loans").doc(loanId);
 
     try {
       await docRef.update({
         "clientId": clientId,
+        "id": loanId,
         "mount": mount,
         "interest": interest,
         "monthlyPayment": monthlyPayment,
@@ -113,7 +124,6 @@ class LoanService {
         "date": date,
         "isPaid": isPaid
       }).then((value) => print("Loan updated"));
-
     } catch (e) {
       print("Error updating loan document $e");
     }

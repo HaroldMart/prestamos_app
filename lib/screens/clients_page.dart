@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/models/client.dart';
-import 'package:prestamos_app/screens/client_profile_page.dart';
+import 'package:prestamos_app/screens/client_details_page.dart';
 import '../services/client_service.dart';
 
 class ClientsPage extends StatefulWidget {
@@ -14,8 +14,8 @@ class ClientsPage extends StatefulWidget {
 class _ClientsPageState extends State<ClientsPage> {
   final GlobalKey<FormState> _clientFormKey = GlobalKey<FormState>();
   FirebaseFirestore db = FirebaseFirestore.instance;
-  late List<Client> clients;
-  late Client client;
+  List<Client> clients = [];
+  late Client client = Client(idUser: 'no c',name: 'vidia');
 
   @override
   void initState() {
@@ -54,7 +54,7 @@ class _ClientsPageState extends State<ClientsPage> {
                         // Envia el objeto de cliente del array a la página de perfil del cliente.
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) =>
-                                ClientProfilePage(clients[index])));
+                                ClientDetailsPage(clients[index])));
                       },
                       onLongPress: () {
                         // Agregar aquí la lógica para manejar la pulsación larga en un cliente.
@@ -165,8 +165,8 @@ class _ClientsPageState extends State<ClientsPage> {
                         },
                         onSaved: (value) {
                           setState(() {
-                            client.document = value.toString();
-                          });
+                            client.document = value.toString();                            
+                          });           
                         },
                       ),
                       const SizedBox(

@@ -25,6 +25,7 @@ class PaymentService {
             var paymentData = docSnapshot.data();
             var payment = Payment_(
                 loanId: paymentData['loanId'],
+                id: paymentData['id'],
                 mount: paymentData['mount'],
                 date: paymentData['date']);
 
@@ -55,7 +56,10 @@ class PaymentService {
       final data = doc.data() as Map<String, dynamic>;
 
       final payment = Payment_(
-          loanId: data["loanId"], mount: data["mount"], date: data["date"]);
+          loanId: data["loanId"],
+          id: data["id"],
+          mount: data["mount"],
+          date: data["date"]);
 
       print("Getting payment document");
 
@@ -80,8 +84,10 @@ class PaymentService {
         );
 
     try {
-      await paymentRef.add(payment).then((documentSnapshot) =>
-          print("Added payment with ID: ${documentSnapshot.id}"));
+      await paymentRef.add(payment).then((documentSnapshot) => {
+            documentSnapshot.update({"id": documentSnapshot.id}),
+            print("Added payment with ID: ${documentSnapshot.id}")
+          });
     } catch (e) {
       print("Error adding payment: $e");
     }
@@ -98,9 +104,12 @@ class PaymentService {
         .doc(paymentId);
 
     try {
-      await docRef
-          .update({"loanId": loanId, "mount": mount, "date": date}).then(
-              (value) => print("Payment updated"));
+      await docRef.update({
+        "loanId": loanId,
+        "id": paymentId,
+        "mount": mount,
+        "date": date
+      }).then((value) => print("Payment updated"));
     } catch (e) {
       print("Error updating payment document $e");
     }

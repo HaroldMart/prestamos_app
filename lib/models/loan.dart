@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Loan {
   String clientId;
+  String? id;
   double mount; // monto total a prestar
   double? interest; // intereses del prestamo
   double monthlyPayment; // cuotas mensuales
@@ -13,6 +14,7 @@ class Loan {
 
   Loan(
       {required this.clientId,
+      this.id,
       required this.mount,
       this.interest,
       required this.monthlyPayment,
@@ -29,6 +31,7 @@ class Loan {
     final data = snapshot.data();
     return Loan(
         clientId: data?['clientId'],
+        id: data?['id'],
         mount: data?['mount'],
         interest: data?['interest'],
         monthlyPayment: data?['monthlyPayment'],
@@ -42,6 +45,7 @@ class Loan {
   Map<String, dynamic> toFirestore() {
     return {
       "clientId": clientId,
+      "id": id,
       "mount": mount,
       "interest": interest,
       "monthlyPayment": monthlyPayment,

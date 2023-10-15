@@ -10,7 +10,7 @@ class ClientService {
   ClientService({required this.db});
 
   Future<List<Client>> getAll() async {
-    final List<Client> clients = [];
+    List<Client> clients = [];
     final dbRef = db.collection("clients");
 
     try {
@@ -80,7 +80,7 @@ class ClientService {
         );
     try {
       await dbRef.add(client).then((documentSnapshot) => {
-            documentSnapshot.update({'id': documentSnapshot.id}),
+            documentSnapshot.update({"id": documentSnapshot.id}),
             print("Added client with ID: ${documentSnapshot.id}"),
           });
     } catch (e) {
