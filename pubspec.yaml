@@ -39,6 +39,7 @@ dependencies:
   firebase_core: ^2.16.0
   google_sign_in: ^6.1.5
   cloud_firestore: ^4.9.3
+  flutter_iconly: ^1.0.2
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +72,35 @@ flutter:
     - family: Inter
       fonts:
         - asset: assets/fonts/Inter/Inter-Regular.ttf
+
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins/Poppins-Thin.ttf
+          weight: 100
+
+        - asset: assets/fonts/Poppins/Poppins-ExtraLight.ttf
+          weight: 200
+
+        - asset: assets/fonts/Poppins/Poppins-Light.ttf
+          weight: 300
+
+        - asset: assets/fonts/Poppins/Poppins-Regular.ttf
+          weight: 400
+
+        - asset: assets/fonts/Poppins/Poppins-Medium.ttf
+          weight: 500
+          
+        - asset: assets/fonts/Poppins/Poppins-bold.ttf
+          weight: 600
+
+        - asset: assets/fonts/Poppins/Poppins-SemiBold.ttf
+          weight: 700
+
+        - asset: assets/fonts/Poppins/Poppins-ExtraBold.ttf
+          weight: 800
+
+        - asset: assets/fonts/Poppins/Poppins-Black.ttf
+          weight: 900
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

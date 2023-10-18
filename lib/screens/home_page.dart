@@ -88,7 +88,7 @@ class HomePage extends StatelessWidget {
     inventando();
 
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.white,
       body: Center(
         child: Text(
           "LOGGED IN AS:  ${user.email!}",

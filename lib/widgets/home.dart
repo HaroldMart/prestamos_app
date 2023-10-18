@@ -5,6 +5,7 @@ import '../screens/setttings_page.dart';
 import '../screens/clients_page.dart';
 import '../screens/calculator_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -26,8 +27,11 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
         appBar: AppBar(
-          title: const Text("Prestamos App"),
+          backgroundColor: Colors.transparent,
+          title: const Text("Prestamos App", style: TextStyle(color: Colors.black),),
+          elevation: 0,
         ),
         // drawer: CustomDrawer.getDrawer(context),
         body: IndexedStack(index: indexPage, children: pages),
@@ -38,13 +42,25 @@ class _HomeState extends State<Home> {
           unselectedFontSize: 11.0,
           items: const [
             BottomNavigationBarItem(
-                icon: Icon(Icons.home_work), label: "Inicio"),
+              icon: Icon(IconlyLight.home),
+              activeIcon: Icon(IconlyBold.home), 
+              label: "Inicio"
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.people), label: "Clientes"),
+              icon: Icon(IconlyLight.user3), 
+              activeIcon: Icon(IconlyBold.user3),
+              label: "Clientes"
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.calculate), label: "Calcular"),
+              icon: Icon(IconlyLight.filter), 
+              activeIcon: Icon(IconlyBold.filter),
+              label: "Calcular"
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.settings), label: "Ajustes"),
+              icon: Icon(IconlyLight.profile), 
+              activeIcon: Icon(IconlyBold.profile),
+              label: "Ajustes"
+            ),
           ],
           onTap: (index) {
             setState(() {
