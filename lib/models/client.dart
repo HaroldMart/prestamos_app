@@ -2,19 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Client {
   String? id;
+  String idUser;
   String name;
-  String lastName;
-  String phone;
-  String document; // cedula
-  String address;
+  String? lastName;
+  String? phone;
+  String? document;
+  String? address;
 
   Client({
     this.id,
+    required this.idUser,
     required this.name,
-    required this.lastName,
-    required this.phone,
-    required this.document,
-    required this.address,
+    this.lastName,
+    this.phone,
+    this.document,
+    this.address,
   });
 
   factory Client.fromFirestore(
@@ -24,6 +26,7 @@ class Client {
     final data = snapshot.data();
     return Client(
         id: data?['id'],
+        idUser: data?['idUser'],
         name: data?['name'],
         lastName: data?['lastName'],
         phone: data?['phone'],
@@ -34,6 +37,7 @@ class Client {
   Map<String, dynamic> toFirestore() {
     return {
       "id": id,
+      "idUser": idUser,
       "name": name,
       "lastName": lastName,
       "phone": phone,
