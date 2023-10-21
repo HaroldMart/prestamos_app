@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       home: const AuthPage(),
       theme: ThemeData(
         primarySwatch: Colors.green,
+        fontFamily: 'Poppins'
       ),
     );
   }

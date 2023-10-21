@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:prestamos_app/models/client.dart';
 import 'package:prestamos_app/screens/client_details_page.dart';
 import '../services/client_service.dart';
@@ -32,8 +33,7 @@ class _ClientsPageState extends State<ClientsPage> {
     });
   }
 
-  String direccionDefault =
-      "no c"; // e que me decia error porque puede ser null xd
+  String direccionDefault = "no c"; // e que me decia error porque puede ser null xd
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class _ClientsPageState extends State<ClientsPage> {
         onPressed: () {
           _dialogBuilder(context);
         },
-        child: const Icon(Icons.add),
+        child: const Icon(IconlyBold.addUser),
       ),
     );
   }
@@ -77,8 +77,7 @@ class _ClientsPageState extends State<ClientsPage> {
       builder: (BuildContext context) {
         return Container(
           child: AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
             title: const Text('Añadir cliente'),
             content: Form(
                 key: _clientFormKey,
