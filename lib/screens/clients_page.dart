@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:prestamos_app/models/client.dart';
@@ -214,9 +215,17 @@ class _ClientsPageState extends State<ClientsPage> {
                                   if (_clientFormKey.currentState!.validate()) {
                                     _clientFormKey.currentState!.save();
 
-                                    final service = ClientService(db: db);
-                                    service.add(client);
+                                    FirebaseAuth auth = FirebaseAuth.instance;
 
+                                    client.idUser = auth.currentUser!.uid;
+
+                                    if(client.idUser.isNotEmpty) {
+                                      print('id user: ${client.idUser}');
+
+                                        final service = ClientService(db: db);
+                                        service.add(client);
+                                    }
+                                
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text(

@@ -27,7 +27,7 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
     super.initState();
     getAllLoans(widget.client.id);
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   Future<void> getAllLoans(clientId) async {
