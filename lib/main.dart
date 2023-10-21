@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const AuthPage(),
       theme: ThemeData(
+        useMaterial3: false,
         primarySwatch: Colors.green,
         fontFamily: 'Poppins'
       ),

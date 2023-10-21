@@ -13,6 +13,7 @@ class ClientsPage extends StatefulWidget {
 }
 
 class _ClientsPageState extends State<ClientsPage> {
+  
   final GlobalKey<FormState> _clientFormKey = GlobalKey<FormState>();
   FirebaseFirestore db = FirebaseFirestore.instance;
   List<Client> clients = [];

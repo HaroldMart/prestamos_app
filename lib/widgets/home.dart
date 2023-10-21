@@ -27,7 +27,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: const Text("Prestamos App", style: TextStyle(color: Colors.black),),

@@ -17,6 +17,7 @@ class ClientDetailsPage extends StatefulWidget {
 
 class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderStateMixin {
 
+  final GlobalKey<FormState> _loanFormKey = GlobalKey<FormState>();
   FirebaseFirestore db = FirebaseFirestore.instance;
   List<Loan> loans = [];
   late Loan loan;
@@ -27,7 +28,7 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
     super.initState();
     getAllLoans(widget.client.id);
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   Future<void> getAllLoans(clientId) async {
@@ -275,7 +276,10 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                           ),
                       ],),
                     ),
-                    Container(
+                    loans.isEmpty? 
+                      const Center(
+                        child: Text('Aún no le has dado un prestamo a este cliente.'),
+                      ) :Container(
                       child: ListView.builder(
                           shrinkWrap: true,
                           itemCount: loans.length,
