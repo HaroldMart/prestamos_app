@@ -6,7 +6,6 @@ import '../models/payment.dart';
 
 class PaymentService {
   FirebaseFirestore db = FirebaseFirestore.instance;
-
   PaymentService({required this.db});
 
   Future<List<Payment_>> getAll(String clientId, String loanId) async {
@@ -24,11 +23,11 @@ class PaymentService {
           for (var docSnapshot in querySnapshot.docs) {
             var paymentData = docSnapshot.data();
             var payment = Payment_(
-                loanId: paymentData['loanId'],
-                id: paymentData['id'],
-                mount: paymentData['mount'],
-                date: paymentData['date']);
-
+              loanId: paymentData['loanId'],
+              id: paymentData['id'],
+              mount: paymentData['mount'],
+              date: paymentData['date']
+            );
             payments.add(payment);
           }
         },
@@ -38,7 +37,6 @@ class PaymentService {
     } catch (e) {
       print("Error getting payments: $e");
     }
-
     return payments;
   }
 

@@ -6,8 +6,12 @@ class Payment_ {
   double mount;
   String date;
 
-  Payment_(
-      {required this.loanId, this.id, required this.mount, required this.date});
+  Payment_({
+    required this.loanId, 
+    this.id, 
+    required this.mount, 
+    required this.date
+  });
 
   factory Payment_.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,

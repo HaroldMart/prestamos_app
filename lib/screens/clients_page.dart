@@ -48,10 +48,8 @@ class _ClientsPageState extends State<ClientsPage> {
                   itemCount: clients.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                      title: Text(
-                          '${clients[index].name} ${clients[index].lastName}'),
-                      subtitle:
-                          Text(clients[index].address ?? direccionDefault),
+                      title: Text('${clients[index].name} ${clients[index].lastName}'),
+                      subtitle: Text(clients[index].address ?? direccionDefault),
                       onTap: () { 
                         // Envia el objeto de cliente del array a la página de perfil del cliente.
                         Navigator.of(context).push(MaterialPageRoute(

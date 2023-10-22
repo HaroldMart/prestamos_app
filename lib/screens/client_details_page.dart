@@ -320,7 +320,8 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                                 trailing: const Icon(IconlyLight.arrowRight2),
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => LoanDetailsPage(widget.client.id, loans[index])));
+                                      builder: (c4ontext) => LoanDetailsPage(widget.client.id, loans[index])));
+                                      print('id: ${widget.client.id} ${loans[index].toString()}');
                                 },
                                 onLongPress: () {},
                               )

@@ -51,11 +51,6 @@ class _HomeState extends State<Home> {
               label: "Clientes"
             ),
             BottomNavigationBarItem(
-              icon: Icon(IconlyLight.filter), 
-              activeIcon: Icon(IconlyBold.filter),
-              label: "Calcular"
-            ),
-            BottomNavigationBarItem(
               icon: Icon(IconlyLight.profile), 
               activeIcon: Icon(IconlyBold.profile),
               label: "Ajustes"

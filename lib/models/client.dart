@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Client {
+  
   String? id;
   String idUser;
   String name;
