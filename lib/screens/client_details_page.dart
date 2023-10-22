@@ -321,7 +321,6 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (c4ontext) => LoanDetailsPage(widget.client.id, loans[index])));
-                                      print('id: ${widget.client.id} ${loans[index].toString()}');
                                 },
                                 onLongPress: () {},
                               )

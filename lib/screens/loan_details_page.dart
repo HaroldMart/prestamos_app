@@ -11,7 +11,7 @@ import '../models/payment.dart';
 class LoanDetailsPage extends StatefulWidget {
 
   const LoanDetailsPage(this.clientId, this.loan, {super.key});
-  final String clientId;
+  final String? clientId;
   final Loan loan;
 
   @override
@@ -130,23 +130,23 @@ class _LoanDetailsPage extends State<LoanDetailsPage> {
                         ),
                       ],
                     ),
-                    Column(
+                    const Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('TOTAL PAGADO:',
+                         Text('TOTAL PAGADO:',
                         style: TextStyle(
                           color: Color(0xFF90A4AE),
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           height: 0,
                         )),
-                        const SizedBox(height: 5),
+                         SizedBox(height: 5),
                         SizedBox(
                           width: double.infinity,
                           child: Text('Aun no disponible',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Color(0xFF2B3841),
                             fontSize: 14,
                             fontWeight: FontWeight.w600,

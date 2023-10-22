@@ -20,6 +20,7 @@ class LoanService {
           var loanData = docSnapshot.data();
           var loan = Loan(
               clientId: loanData['clientId'],
+              id: loanData["id"],
               mount: loanData['mount'],
               interest: loanData['interest'],
               monthlyPayment: loanData['monthlyPayment'],
