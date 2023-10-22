@@ -11,7 +11,7 @@ import '../models/payment.dart';
 class LoanDetailsPage extends StatefulWidget {
 
   const LoanDetailsPage(this.clientId, this.loan, {super.key});
-  final String clientId;
+  final String? clientId;
   final Loan loan;
 
   @override

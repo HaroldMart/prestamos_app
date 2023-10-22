@@ -51,7 +51,9 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {}
+        onPressed: () {
+
+        }
       ),
       appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -224,7 +226,8 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                                       fontWeight: FontWeight.w500,
                                     ),),
                                     const SizedBox(height: 5),
-                                    Text('${widget.client.document}' ,style: const TextStyle(
+                                    Text('${widget.client.document}',
+                                      style: const TextStyle(
                                       color: Color(0xFF2B3841),
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -278,7 +281,15 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                     ),
                     loans.isEmpty? 
                       const Center(
-                        child: Text('Aún no le has dado un prestamo a este cliente.'),
+                        child: Text('Aún no le has dado un prestamo a este cliente.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color.fromARGB(59, 114, 114, 114),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            height: 0,
+                          )
+                        ),
                       ) :Container(
                       child: ListView.builder(
                           shrinkWrap: true,
@@ -321,7 +332,6 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (c4ontext) => LoanDetailsPage(widget.client.id, loans[index])));
-                                      print('id: ${widget.client.id} ${loans[index].toString()}');
                                 },
                                 onLongPress: () {},
                               )
@@ -334,5 +344,175 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
             ],
           ),
         ));
+  }
+
+  Future<void> _dialogForm(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          child: AlertDialog(
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            title: const Text('Añadir prestamo'),
+            content: Form(
+                key: _loanFormKey,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Monto',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'No dejes este campo vacio';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          setState(() {
+                            
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Interés',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'No dejes este campo vacio';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          setState(() {
+
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Cuota',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'No dejes este campo vacio';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          setState(() {
+
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Cuota totales',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'No dejes este campo vacio';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          setState(() {
+
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Fecha',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'No dejes este campo vacio';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          setState(() {
+
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 30.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Cancelar')),
+                          FilledButton(
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18.0),
+                                          side: const BorderSide(
+                                              color: Colors.green)))),
+                              onPressed: () {
+                                setState(() {
+                                  if (_loanFormKey.currentState!.validate()) {
+                                    _loanFormKey.currentState!.save();
+
+                                    LoanService(db: db);
+                                
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Prestamo agregado exitosamente.')
+                                      ),
+                                    );
+                                    Navigator.of(context).pop();
+                                  }
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Error al agregar pago.')
+                                    ),
+                                  );
+                                });
+                              },
+                              child: const Text('Aceptar'))
+                        ],
+                      )
+                    ],
+                  ),
+                )),
+          ),
+        );
+      },
+    );
   }
 }

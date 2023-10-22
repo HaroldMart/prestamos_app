@@ -12,8 +12,8 @@ class Loan {
   String date; // fecha en que se realizo el prestamo
   bool isPaid; // si es true, el prestamo ya se pago por completo, de lo contrario es false
 
-  Loan(
-      {required this.clientId,
+  Loan({
+    required this.clientId,
       this.id,
       required this.mount,
       this.interest,
