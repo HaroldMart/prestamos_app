@@ -20,8 +20,21 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
   final GlobalKey<FormState> _loanFormKey = GlobalKey<FormState>();
   FirebaseFirestore db = FirebaseFirestore.instance;
   List<Loan> loans = [];
-  late Loan loan;
+  Loan loan = Loan(
+    clientId: '',
+    mount: 0.0,
+    monthlyPayment: 0.0,
+    totalMonthlyPayment: 0.0,
+    total: 0.0,
+    date: '',
+    isPaid: false
+  );
+
   late final TabController _tabController;
+  TextEditingController _mount = TextEditingController();
+  TextEditingController _interest = TextEditingController();
+  TextEditingController _monthlyPayment = TextEditingController();
+  TextEditingController _totalMonthlyPayment = TextEditingController();
 
   @override
   void initState() {
@@ -52,7 +65,7 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-
+          _dialogForm(context);
         }
       ),
       appBar: AppBar(
@@ -301,6 +314,10 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                                 vertical: 5,
                                 horizontal: 5,
                               ),
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 0,
+                              ),
                               clipBehavior: Clip.antiAlias,
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -326,7 +343,7 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                                         ),
                                     )
                                 ),
-                                title: Text(loans[index].total.toString()),
+                                title: Text(loans[index].mount.toString()),
                                 subtitle: Text(loans[index].date),
                                 trailing: const Icon(IconlyLight.arrowRight2),
                                 onTap: () {
@@ -361,6 +378,8 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                   child: Column(
                     children: [
                       TextFormField(
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        controller: _mount,
                         decoration: InputDecoration(
                           labelText: 'Monto',
                           border: OutlineInputBorder(
@@ -373,9 +392,9 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                           }
                           return null;
                         },
-                        onSaved: (value) {
+                        onSaved: (velue) {
                           setState(() {
-                            
+                            loan.mount = double.parse(_mount.text);
                           });
                         },
                       ),
@@ -383,6 +402,8 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                         height: 10.0,
                       ),
                       TextFormField(
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        controller: _interest,
                         decoration: InputDecoration(
                           labelText: 'Interés',
                           border: OutlineInputBorder(
@@ -396,7 +417,7 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                         },
                         onSaved: (value) {
                           setState(() {
-
+                            loan.interest = double.parse(_interest.text);
                           });
                         },
                       ),
@@ -404,6 +425,7 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                         height: 10.0,
                       ),
                       TextFormField(
+                        controller: _monthlyPayment,
                         decoration: InputDecoration(
                           labelText: 'Cuota',
                           border: OutlineInputBorder(
@@ -417,7 +439,7 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                         },
                         onSaved: (value) {
                           setState(() {
-
+                            loan.monthlyPayment = double.parse(_monthlyPayment.text);
                           });
                         },
                       ),
@@ -425,6 +447,7 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                         height: 10.0,
                       ),
                       TextFormField(
+                        controller: _totalMonthlyPayment,
                         decoration: InputDecoration(
                           labelText: 'Cuota totales',
                           border: OutlineInputBorder(
@@ -438,28 +461,7 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                         },
                         onSaved: (value) {
                           setState(() {
-
-                          });
-                        },
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Fecha',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'No dejes este campo vacio';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          setState(() {
-
+                            loan.totalMonthlyPayment = double.parse(_totalMonthlyPayment.text);
                           });
                         },
                       ),
@@ -488,7 +490,16 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                                   if (_loanFormKey.currentState!.validate()) {
                                     _loanFormKey.currentState!.save();
 
-                                    LoanService(db: db);
+                                    String clientId = '${widget.client.id}';
+                                    var date = DateTime.now();
+                                    loan.date = '${date.day} de ${date.month}, ${date.year}';
+
+                                    final loanService = LoanService(db: db);
+                                    loanService.add(clientId, loan);
+
+                                    setState(() {
+                                      getAllLoans(clientId);
+                                    });
                                 
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -496,12 +507,13 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                                       ),
                                     );
                                     Navigator.of(context).pop();
-                                  }
-                                  ScaffoldMessenger.of(context).showSnackBar(
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text('Error al agregar pago.')
                                     ),
                                   );
+                                  }
                                 });
                               },
                               child: const Text('Aceptar'))
