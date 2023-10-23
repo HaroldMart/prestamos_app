@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/models/client.dart';
+import 'package:prestamos_app/screens/clients_page.dart';
 import 'package:prestamos_app/screens/loan_details_page.dart';
+import 'package:prestamos_app/services/client_service.dart';
 import 'package:prestamos_app/services/loan_service.dart';
 import '../models/loan.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
@@ -53,6 +55,16 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
       loans = data;
       print(loans.toString());
     });
+  }
+
+  deleteLoan(clientId, loanId) {
+    final service = LoanService(db: db);
+    service.delete(clientId, loanId);
+  }
+
+  deleteSelf(clientId) {
+    final service = ClientService(db: db);
+    service.delete(clientId);
   }
 
   @override
@@ -140,13 +152,49 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         IconButton(
+                          icon: const Icon(IconlyLight.edit),
                           onPressed: () {}, 
-                          icon: const Icon(IconlyLight.edit)
                         ),
                         IconButton(
-                          onPressed: () {}, 
-                          icon: const Icon(IconlyLight.delete)
-                          )
+                          icon: const Icon(IconlyLight.delete),
+                          onPressed: () {
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20))),
+                                  title: const Text('Eliminar cliente'),
+                                  content: const Text(
+                                      '¿Seguro que quieres eliminar este cliente?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => {
+                                        Navigator.pop(context, 'Cancel'),
+                                      },
+                                      child: const Text('Cancelar'),
+                                    ),
+                                    FilledButton(
+                                      style: ButtonStyle(
+                                          shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(18.0),
+                                                  side: const BorderSide(
+                                                      color: Colors.green)))),
+                                      onPressed: () => {
+                                        deleteSelf(widget.client.id),
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ClientsPage())),
+                                        const SnackBar(
+                                          content: Text('Cliente eliminado'),
+                                        )
+                                      },
+                                      child: const Text('Eliminar'),
+                                    ),
+                                  ]),
+                            );
+                          }, 
+                        )
                       ],
                     )
                   ],
@@ -355,12 +403,19 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                                 ),
                                 title: Text(loans[index].mount.toString()),
                                 subtitle: Text(loans[index].date),
-                                trailing: const Icon(IconlyLight.arrowRight2),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.more_vert),
+                                  onPressed: () {
+                                    _buildBottomSheet(index);
+                                  },
+                                ),
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (c4ontext) => LoanDetailsPage(widget.client.id, loans[index])));
                                 },
-                                onLongPress: () {},
+                                onLongPress: () {
+                                  _buildBottomSheet(index);
+                                },
                               )
                             );
                           },
@@ -537,4 +592,72 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
       },
     );
   }
+
+  Future<dynamic> _buildBottomSheet(loanIndex) => showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        context: context,
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: 190,
+            child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: ListView(
+                  children: [
+                    ListTile(
+                      leading: const Icon(IconlyBold.edit),
+                      title: const Text('Editar'),
+                      subtitle: const Text('Editar este prestamo'),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      leading: const Icon(IconlyBold.delete),
+                      title: const Text('Borrar'),
+                      subtitle: const Text('Eliminar este prestamo'),
+                      onTap: () {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              title: const Text('Eliminar prestamo'),
+                              content: const Text(
+                                  '¿Seguro que quieres eliminar prestamo?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => {
+                                    Navigator.pop(context, 'Cancel'),
+                                  },
+                                  child: const Text('Cancelar'),
+                                ),
+                                FilledButton(
+                                  style: ButtonStyle(
+                                      shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                              side: const BorderSide(
+                                                  color: Colors.green)))),
+                                  onPressed: () => {
+                                    deleteLoan(widget.client.id ,loans[loanIndex].id),
+                                    getAllLoans(widget.client.id),
+                                    Navigator.pop(context, 'Eliminar'),
+                                    const SnackBar(
+                                      content: Text('Prestamo eliminado'),
+                                    )
+                                  },
+                                  child: const Text('Eliminar'),
+                                ),
+                              ]),
+                        );
+                      },
+                    )
+                  ],
+                )),
+          );
+        },
+      );
 }

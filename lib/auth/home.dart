@@ -1,7 +1,8 @@
+import 'package:prestamos_app/screens/search_page.dart';
+
 import '../screens/home_page.dart';
 import '../screens/setttings_page.dart';
 import '../screens/clients_page.dart';
-import '../screens/calculator_page.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -17,7 +18,7 @@ class _HomeState extends State<Home> {
   final List<Widget> pages = [
     HomePage(),
     const ClientsPage(),
-    const CalculatorPage(),
+    const SearchPage(),
     const SettingsPage()
   ];
 

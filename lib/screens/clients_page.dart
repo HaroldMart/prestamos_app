@@ -1,3 +1,6 @@
+import 'dart:html';
+import 'dart:js_interop_unsafe';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +18,10 @@ class ClientsPage extends StatefulWidget {
 }
 
 class _ClientsPageState extends State<ClientsPage> {
-  
   final GlobalKey<FormState> _clientFormKey = GlobalKey<FormState>();
   FirebaseFirestore db = FirebaseFirestore.instance;
   List<Client> clients = [];
-  late Client client = Client(idUser: 'no c',name: 'vidia');
+  late Client client = Client(idUser: 'no c', name: 'vidia');
   final ScrollController _scrollController = new ScrollController();
 
   @override
@@ -29,7 +31,7 @@ class _ClientsPageState extends State<ClientsPage> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     _scrollController.dispose();
   }
@@ -43,37 +45,55 @@ class _ClientsPageState extends State<ClientsPage> {
     });
   }
 
-  String direccionDefault = "no c"; // e que me decia error porque puede ser null xd
+  deleteClient(clientId) {
+    final service = ClientService(db: db);
+    service.delete(clientId);
+  }
+
+  String direccionDefault =
+      "no c"; // e que me decia error porque puede ser null xd
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: clients.isEmpty
-              ? const Center(
-                  child: Text('No hay clientes disponibles.'),
-                )
-              : ListView.builder(
-                  controller: _scrollController,
-                  itemCount: clients.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: Text('${clients[index].name} ${clients[index].lastName}'),
-                      subtitle: Text(clients[index].address ?? direccionDefault),
-                      onTap: () { 
-                        // Envia el objeto de cliente del array a la página de perfil del cliente.
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                ClientDetailsPage(clients[index])));
-                      },
-                      onLongPress: () {
-                        // Agregar aquí la lógica para manejar la pulsación larga en un cliente.
-                      },
-                    );
+          ? const Center(
+              child: Text('No hay clientes disponibles.'),
+            )
+          : ListView.builder(
+              controller: _scrollController,
+              itemCount: clients.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  trailing: IconButton(
+                    icon: const Icon(Icons.more_vert),
+                    onPressed: () {
+                      _buildBottomSheet(index);
+                    },
+                  ),
+                  title:
+                      Text('${clients[index].name} ${clients[index].lastName}'),
+                  subtitle: Text(clients[index].address ?? direccionDefault),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            ClientDetailsPage(clients[index])));
                   },
-                ),
+                  onLongPress: () {
+                    _buildBottomSheet(index);
+                  },
+                );
+              },
+            ),
       floatingActionButton: ScrollingFabAnimated(
-        icon: const Icon(IconlyBold.addUser, color: Colors.white,),
-        text: const Text('Añadir cliente', style: TextStyle(color: Colors.white ,fontSize: 16.0),),
+        icon: const Icon(
+          IconlyBold.addUser,
+          color: Colors.white,
+        ),
+        text: const Text(
+          'Añadir cliente',
+          style: TextStyle(color: Colors.white, fontSize: 16.0),
+        ),
         color: Colors.green,
         onPress: () {
           _dialogForm(context);
@@ -93,7 +113,8 @@ class _ClientsPageState extends State<ClientsPage> {
       builder: (BuildContext context) {
         return Container(
           child: AlertDialog(
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
             title: const Text('Añadir cliente'),
             content: Form(
                 key: _clientFormKey,
@@ -180,8 +201,8 @@ class _ClientsPageState extends State<ClientsPage> {
                         },
                         onSaved: (value) {
                           setState(() {
-                            client.document = value.toString();                            
-                          });           
+                            client.document = value.toString();
+                          });
                         },
                       ),
                       const SizedBox(
@@ -218,8 +239,7 @@ class _ClientsPageState extends State<ClientsPage> {
                               child: const Text('Cancelar')),
                           FilledButton(
                               style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
+                                  shape: MaterialStateProperty.all(
                                       RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(18.0),
@@ -234,17 +254,17 @@ class _ClientsPageState extends State<ClientsPage> {
 
                                     client.idUser = auth.currentUser!.uid;
 
-                                    if(client.idUser.isNotEmpty) {
+                                    if (client.idUser.isNotEmpty) {
                                       print('id user: ${client.idUser}');
 
-                                        final service = ClientService(db: db);
-                                        service.add(client);
+                                      final service = ClientService(db: db);
+                                      service.add(client);
 
-                                        setState(() {
-                                          getAllClients();
-                                        });
+                                      setState(() {
+                                        getAllClients();
+                                      });
                                     }
-                                
+
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text(
@@ -270,4 +290,72 @@ class _ClientsPageState extends State<ClientsPage> {
       },
     );
   }
+
+  Future<dynamic> _buildBottomSheet(clientIndex) => showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        context: context,
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: 190,
+            child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: ListView(
+                  children: [
+                    ListTile(
+                      leading: const Icon(IconlyBold.edit),
+                      title: const Text('Editar'),
+                      subtitle: Text('Editar a ${clients[clientIndex].name}'),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      leading: const Icon(IconlyBold.delete),
+                      title: const Text('Borrar'),
+                      subtitle: Text('Eliminar a ${clients[clientIndex].name}'),
+                      onTap: () {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              title: const Text('Eliminar cliente'),
+                              content: Text(
+                                  '¿Seguro que quieres eliminar a ${clients[clientIndex].name} ${clients[clientIndex].lastName}?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => {
+                                    Navigator.pop(context, 'Cancel'),
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                                FilledButton(
+                                  style: ButtonStyle(
+                                      shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                              side: const BorderSide(
+                                                  color: Colors.green)))),
+                                  onPressed: () => {
+                                    deleteClient(clients[clientIndex].id),
+                                    getAllClients(),
+                                    Navigator.pop(context, 'Eliminar'),
+                                    const SnackBar(
+                                      content: Text('Cliente eliminado'),
+                                    )
+                                  },
+                                  child: const Text('Eliminar'),
+                                ),
+                              ]),
+                        );
+                      },
+                    )
+                  ],
+                )),
+          );
+        },
+      );
 }

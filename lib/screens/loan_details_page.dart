@@ -48,6 +48,11 @@ class _LoanDetailsPage extends State<LoanDetailsPage> {
     });
   }
 
+  deletePayment(clientId, loanId, paymentId) {
+    final service = PaymentService(db: db);
+    service.delete(clientId, loanId, paymentId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -291,6 +296,12 @@ class _LoanDetailsPage extends State<LoanDetailsPage> {
                         ],
                       ),
                       child: ListTile(
+                        trailing: IconButton(
+                          icon: const Icon(Icons.more_vert),
+                          onPressed: () {
+                            _buildBottomSheet(index);
+                          },
+                        ),
                         title: Text(payments[index].mount.toString(),
                            style: const TextStyle(
                             color: Color(0xFF3EAD2C),
@@ -308,6 +319,9 @@ class _LoanDetailsPage extends State<LoanDetailsPage> {
                             height: 0,
                           ), 
                         ),
+                        onLongPress: () {
+                          _buildBottomSheet(index);
+                        },
                       ),
                     );
                   },
@@ -412,4 +426,72 @@ class _LoanDetailsPage extends State<LoanDetailsPage> {
       },
     );
   }
+
+  Future<dynamic> _buildBottomSheet(paymentIndex) => showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        context: context,
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: 190,
+            child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: ListView(
+                  children: [
+                    ListTile(
+                      leading: const Icon(IconlyBold.edit),
+                      title: const Text('Editar'),
+                      subtitle: const Text('Editar este pago'),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      leading: const Icon(IconlyBold.delete),
+                      title: const Text('Borrar'),
+                      subtitle: const Text('Eliminar este pago'),
+                      onTap: () {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              title: const Text('Eliminar pago'),
+                              content: const Text(
+                                  '¿Seguro que quieres eliminar este pago?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => {
+                                    Navigator.pop(context, 'Cancel'),
+                                  },
+                                  child: const Text('Cancelar'),
+                                ),
+                                FilledButton(
+                                  style: ButtonStyle(
+                                      shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                              side: const BorderSide(
+                                                  color: Colors.green)))),
+                                  onPressed: () => {
+                                    deletePayment(widget.clientId, widget.loan.id , payments[paymentIndex].id),
+                                    getAllPayments(widget.clientId, widget.loan.id),
+                                    const SnackBar(
+                                      content: Text('Pago eliminado'),
+                                    ),
+                                    Navigator.pop(context, 'Eliminar'),
+                                  },
+                                  child: const Text('Eliminar'),
+                                ),
+                              ]),
+                        );
+                      },
+                    )
+                  ],
+                )),
+          );
+        },
+      );
 }
