@@ -7,6 +7,7 @@ import 'package:prestamos_app/services/payment_service.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import '../models/loan.dart';
 import '../models/payment.dart';
+import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 
 class LoanDetailsPage extends StatefulWidget {
 
@@ -20,6 +21,7 @@ class LoanDetailsPage extends StatefulWidget {
 
 class _LoanDetailsPage extends State<LoanDetailsPage> {
 
+  final ScrollController _scrollController = new ScrollController();
   FirebaseFirestore db = FirebaseFirestore.instance;
   List<Payment_> payments = [];
   late Payment_ loan;
@@ -61,13 +63,21 @@ class _LoanDetailsPage extends State<LoanDetailsPage> {
             },
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
+        floatingActionButton: ScrollingFabAnimated(
+          icon: const Icon(Icons.add, color: Colors.white,),
+          text: const Text('Añadir pago', style: TextStyle(color: Colors.white ,fontSize: 16.0),),
+          color: Colors.green,
+          onPress: () {
             _dialogForm(context);
           },
+          scrollController: _scrollController,
+          animateIcon: false,
+          inverted: false,
+          width: 170,
+          radius: 20,
         ),
         body: SingleChildScrollView(
+          controller: _scrollController,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           child: Column(
               children: [

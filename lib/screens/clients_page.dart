@@ -5,6 +5,7 @@ import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:prestamos_app/models/client.dart';
 import 'package:prestamos_app/screens/client_details_page.dart';
 import '../services/client_service.dart';
+import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 
 class ClientsPage extends StatefulWidget {
   const ClientsPage({Key? key}) : super(key: key);
@@ -19,11 +20,18 @@ class _ClientsPageState extends State<ClientsPage> {
   FirebaseFirestore db = FirebaseFirestore.instance;
   List<Client> clients = [];
   late Client client = Client(idUser: 'no c',name: 'vidia');
+  final ScrollController _scrollController = new ScrollController();
 
   @override
   void initState() {
-    super.initState();
     getAllClients();
+    super.initState();
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    _scrollController.dispose();
   }
 
   Future<void> getAllClients() async {
@@ -45,6 +53,7 @@ class _ClientsPageState extends State<ClientsPage> {
                   child: Text('No hay clientes disponibles.'),
                 )
               : ListView.builder(
+                  controller: _scrollController,
                   itemCount: clients.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
@@ -62,16 +71,23 @@ class _ClientsPageState extends State<ClientsPage> {
                     );
                   },
                 ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _dialogBuilder(context);
+      floatingActionButton: ScrollingFabAnimated(
+        icon: const Icon(IconlyBold.addUser, color: Colors.white,),
+        text: const Text('Añadir cliente', style: TextStyle(color: Colors.white ,fontSize: 16.0),),
+        color: Colors.green,
+        onPress: () {
+          _dialogForm(context);
         },
-        child: const Icon(IconlyBold.addUser),
+        scrollController: _scrollController,
+        animateIcon: false,
+        inverted: false,
+        width: 190,
+        radius: 20,
       ),
     );
   }
 
-  Future<void> _dialogBuilder(BuildContext context) {
+  Future<void> _dialogForm(BuildContext context) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -223,6 +239,10 @@ class _ClientsPageState extends State<ClientsPage> {
 
                                         final service = ClientService(db: db);
                                         service.add(client);
+
+                                        setState(() {
+                                          getAllClients();
+                                        });
                                     }
                                 
                                     ScaffoldMessenger.of(context).showSnackBar(

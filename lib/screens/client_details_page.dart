@@ -5,6 +5,7 @@ import 'package:prestamos_app/screens/loan_details_page.dart';
 import 'package:prestamos_app/services/loan_service.dart';
 import '../models/loan.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 
 class ClientDetailsPage extends StatefulWidget {
   const ClientDetailsPage(this.client, {super.key});
@@ -17,6 +18,7 @@ class ClientDetailsPage extends StatefulWidget {
 
 class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderStateMixin {
 
+  final ScrollController _scrollController = new ScrollController();
   final GlobalKey<FormState> _loanFormKey = GlobalKey<FormState>();
   FirebaseFirestore db = FirebaseFirestore.instance;
   List<Loan> loans = [];
@@ -62,11 +64,18 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
+      floatingActionButton: ScrollingFabAnimated(
+        icon: const Icon(Icons.add, color: Colors.white,),
+        text: const Text('Añadir prestamo', style: TextStyle(color: Colors.white ,fontSize: 16.0),),
+        color: Colors.green,
+        onPress: () {
           _dialogForm(context);
-        }
+        },
+        scrollController: _scrollController,
+        animateIcon: false,
+        inverted: false,
+        width: 215,
+        radius: 20,
       ),
       appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -81,6 +90,7 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
         ),
         backgroundColor: const Color.fromARGB(255, 244, 244, 244),
         body: SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             children: [
               Container(
