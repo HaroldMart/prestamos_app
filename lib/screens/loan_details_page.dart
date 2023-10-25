@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/models/client.dart';
 import 'package:prestamos_app/models/payment.dart';
@@ -44,7 +45,9 @@ class _LoanDetailsPage extends State<LoanDetailsPage> {
     final List<Payment_> data = await service.getAll(clientId, loanId);
     setState(() {
       payments = data;
-      print(payments.toString());
+      if (kDebugMode) {
+        print(payments.toString());
+      }
     });
   }
 

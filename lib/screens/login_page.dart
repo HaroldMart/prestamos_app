@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/screens/register_page.dart';
 import '../widgets/home.dart';
@@ -45,7 +46,9 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordController.text,
       );
 
-      print(userCredentials);
+      if (kDebugMode) {
+        print(userCredentials);
+      }
       if (userCredentials != null) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
@@ -54,11 +57,14 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     } on FirebaseAuthException catch (e) {
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
       //wrong Email
       showmessage(e.code);
     } catch (error) {
-      print(error);
+      if (kDebugMode) {
+        print(error);
+      }
     }
   }
 

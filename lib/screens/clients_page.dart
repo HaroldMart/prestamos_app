@@ -1,8 +1,6 @@
-import 'dart:html';
-import 'dart:js_interop_unsafe';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:prestamos_app/models/client.dart';
@@ -111,181 +109,181 @@ class _ClientsPageState extends State<ClientsPage> {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          child: AlertDialog(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0))),
-            title: const Text('Añadir cliente'),
-            content: Form(
-                key: _clientFormKey,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Nombre',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          // filled: true,
-                          // fillColor: Color.fromARGB(255, 242, 255, 227),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'No dejes este campo vacio';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          setState(() {
-                            client.name = value.toString();
-                          });
-                        },
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0))),
+          title: const Text('Añadir cliente'),
+          content: Form(
+              key: _clientFormKey,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Nombre',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        // filled: true,
+                        // fillColor: Color.fromARGB(255, 242, 255, 227),
                       ),
-                      const SizedBox(
-                        height: 10.0,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'No dejes este campo vacio';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        setState(() {
+                          client.name = value.toString();
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Apellido',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
                       ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Apellido',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'No dejes este campo vacio';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          setState(() {
-                            client.lastName = value.toString();
-                          });
-                        },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'No dejes este campo vacio';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        setState(() {
+                          client.lastName = value.toString();
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Teléfono',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
                       ),
-                      const SizedBox(
-                        height: 10.0,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'No dejes este campo vacio';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        setState(() {
+                          client.phone = value.toString();
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Cédula',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
                       ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Teléfono',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'No dejes este campo vacio';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          setState(() {
-                            client.phone = value.toString();
-                          });
-                        },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'No dejes este campo vacio';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        setState(() {
+                          client.document = value.toString();
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Dirección',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)),
                       ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Cédula',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'No dejes este campo vacio';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          setState(() {
-                            client.document = value.toString();
-                          });
-                        },
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Dirección',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'No dejes este campo vacio';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          setState(() {
-                            client.address = value.toString();
-                          });
-                        },
-                      ),
-                      const SizedBox(
-                        height: 30.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text('Cancelar')),
-                          FilledButton(
-                              style: ButtonStyle(
-                                  shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0),
-                                          side: const BorderSide(
-                                              color: Colors.green)))),
-                              onPressed: () {
-                                setState(() {
-                                  if (_clientFormKey.currentState!.validate()) {
-                                    _clientFormKey.currentState!.save();
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'No dejes este campo vacio';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        setState(() {
+                          client.address = value.toString();
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 30.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Cancelar')),
+                        FilledButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                        side: const BorderSide(
+                                            color: Colors.green)))),
+                            onPressed: () {
+                              setState(() {
+                                if (_clientFormKey.currentState!.validate()) {
+                                  _clientFormKey.currentState!.save();
 
-                                    FirebaseAuth auth = FirebaseAuth.instance;
+                                  FirebaseAuth auth = FirebaseAuth.instance;
 
-                                    client.idUser = auth.currentUser!.uid;
+                                  client.idUser = auth.currentUser!.uid;
 
-                                    if (client.idUser.isNotEmpty) {
+                                  if (client.idUser.isNotEmpty) {
+                                    if (kDebugMode) {
                                       print('id user: ${client.idUser}');
-
-                                      final service = ClientService(db: db);
-                                      service.add(client);
-
-                                      setState(() {
-                                        getAllClients();
-                                      });
                                     }
 
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              'Cliente agregado exitosamente.')),
-                                    );
-                                    Navigator.of(context).pop();
+                                    final service = ClientService(db: db);
+                                    service.add(client);
+
+                                    setState(() {
+                                      getAllClients();
+                                    });
                                   }
+
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                        content:
-                                            Text('Error al agregar cliente.')),
+                                        content: Text(
+                                            'Cliente agregado exitosamente.')),
                                   );
-                                });
-                              },
-                              child: const Text('Aceptar'))
-                        ],
-                      )
-                    ],
-                  ),
-                )),
-          ),
+                                  Navigator.of(context).pop();
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text('Error al agregar cliente.')),
+                                );
+                              });
+                            },
+                            child: const Text('Aceptar'))
+                      ],
+                    )
+                  ],
+                ),
+              )),
         );
       },
     );
