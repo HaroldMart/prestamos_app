@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/models/client.dart';
+import 'package:prestamos_app/screens/clients_page.dart';
 import 'package:prestamos_app/screens/loan_details_page.dart';
+import 'package:prestamos_app/services/client_service.dart';
 import 'package:prestamos_app/services/loan_service.dart';
 import '../models/loan.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 
 class ClientDetailsPage extends StatefulWidget {
   const ClientDetailsPage(this.client, {super.key});
@@ -17,11 +20,25 @@ class ClientDetailsPage extends StatefulWidget {
 
 class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderStateMixin {
 
+  final ScrollController _scrollController = new ScrollController();
   final GlobalKey<FormState> _loanFormKey = GlobalKey<FormState>();
   FirebaseFirestore db = FirebaseFirestore.instance;
   List<Loan> loans = [];
-  late Loan loan;
+  Loan loan = Loan(
+    clientId: '',
+    mount: 0.0,
+    monthlyPayment: 0.0,
+    totalMonthlyPayment: 0.0,
+    total: 0.0,
+    date: '',
+    isPaid: false
+  );
+
   late final TabController _tabController;
+  TextEditingController _mount = TextEditingController();
+  TextEditingController _interest = TextEditingController();
+  TextEditingController _monthlyPayment = TextEditingController();
+  TextEditingController _totalMonthlyPayment = TextEditingController();
 
   @override
   void initState() {
@@ -40,6 +57,16 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
     });
   }
 
+  deleteLoan(clientId, loanId) {
+    final service = LoanService(db: db);
+    service.delete(clientId, loanId);
+  }
+
+  deleteSelf(clientId) {
+    final service = ClientService(db: db);
+    service.delete(clientId);
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -49,9 +76,18 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {}
+      floatingActionButton: ScrollingFabAnimated(
+        icon: const Icon(Icons.add, color: Colors.white,),
+        text: const Text('Añadir prestamo', style: TextStyle(color: Colors.white ,fontSize: 16.0),),
+        color: Colors.green,
+        onPress: () {
+          _dialogForm(context);
+        },
+        scrollController: _scrollController,
+        animateIcon: false,
+        inverted: false,
+        width: 215,
+        radius: 20,
       ),
       appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -66,6 +102,7 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
         ),
         backgroundColor: const Color.fromARGB(255, 244, 244, 244),
         body: SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             children: [
               Container(
@@ -115,13 +152,49 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         IconButton(
+                          icon: const Icon(IconlyLight.edit),
                           onPressed: () {}, 
-                          icon: const Icon(IconlyLight.edit)
                         ),
                         IconButton(
-                          onPressed: () {}, 
-                          icon: const Icon(IconlyLight.delete)
-                          )
+                          icon: const Icon(IconlyLight.delete),
+                          onPressed: () {
+                            showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20))),
+                                  title: const Text('Eliminar cliente'),
+                                  content: const Text(
+                                      '¿Seguro que quieres eliminar este cliente?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => {
+                                        Navigator.pop(context, 'Cancel'),
+                                      },
+                                      child: const Text('Cancelar'),
+                                    ),
+                                    FilledButton(
+                                      style: ButtonStyle(
+                                          shape: MaterialStateProperty.all(
+                                              RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(18.0),
+                                                  side: const BorderSide(
+                                                      color: Colors.green)))),
+                                      onPressed: () => {
+                                        deleteSelf(widget.client.id),
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ClientsPage())),
+                                        const SnackBar(
+                                          content: Text('Cliente eliminado'),
+                                        )
+                                      },
+                                      child: const Text('Eliminar'),
+                                    ),
+                                  ]),
+                            );
+                          }, 
+                        )
                       ],
                     )
                   ],
@@ -224,7 +297,8 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                                       fontWeight: FontWeight.w500,
                                     ),),
                                     const SizedBox(height: 5),
-                                    Text('${widget.client.document}' ,style: const TextStyle(
+                                    Text('${widget.client.document}',
+                                      style: const TextStyle(
                                       color: Color(0xFF2B3841),
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
@@ -278,7 +352,15 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                     ),
                     loans.isEmpty? 
                       const Center(
-                        child: Text('Aún no le has dado un prestamo a este cliente.'),
+                        child: Text('Aún no le has dado un prestamo a este cliente.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color.fromARGB(59, 114, 114, 114),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            height: 0,
+                          )
+                        ),
                       ) :Container(
                       child: ListView.builder(
                           shrinkWrap: true,
@@ -289,6 +371,10 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                               padding: const EdgeInsets.symmetric(
                                 vertical: 5,
                                 horizontal: 5,
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 0,
                               ),
                               clipBehavior: Clip.antiAlias,
                               decoration: BoxDecoration(
@@ -315,14 +401,21 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                                         ),
                                     )
                                 ),
-                                title: Text(loans[index].total.toString()),
+                                title: Text(loans[index].mount.toString()),
                                 subtitle: Text(loans[index].date),
-                                trailing: const Icon(IconlyLight.arrowRight2),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.more_vert),
+                                  onPressed: () {
+                                    _buildBottomSheet(index);
+                                  },
+                                ),
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (c4ontext) => LoanDetailsPage(widget.client.id, loans[index])));
                                 },
-                                onLongPress: () {},
+                                onLongPress: () {
+                                  _buildBottomSheet(index);
+                                },
                               )
                             );
                           },
@@ -334,4 +427,237 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
           ),
         ));
   }
+
+  Future<void> _dialogForm(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          child: AlertDialog(
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            title: const Text('Añadir prestamo'),
+            content: Form(
+                key: _loanFormKey,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        controller: _mount,
+                        decoration: InputDecoration(
+                          labelText: 'Monto',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'No dejes este campo vacio';
+                          }
+                          return null;
+                        },
+                        onSaved: (velue) {
+                          setState(() {
+                            loan.mount = double.parse(_mount.text);
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      TextFormField(
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        controller: _interest,
+                        decoration: InputDecoration(
+                          labelText: 'Interés',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'No dejes este campo vacio';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          setState(() {
+                            loan.interest = double.parse(_interest.text);
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      TextFormField(
+                        controller: _monthlyPayment,
+                        decoration: InputDecoration(
+                          labelText: 'Cuota',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'No dejes este campo vacio';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          setState(() {
+                            loan.monthlyPayment = double.parse(_monthlyPayment.text);
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      TextFormField(
+                        controller: _totalMonthlyPayment,
+                        decoration: InputDecoration(
+                          labelText: 'Cuota totales',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'No dejes este campo vacio';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          setState(() {
+                            loan.totalMonthlyPayment = double.parse(_totalMonthlyPayment.text);
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 30.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Cancelar')),
+                          FilledButton(
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18.0),
+                                          side: const BorderSide(
+                                              color: Colors.green)))),
+                              onPressed: () {
+                                setState(() {
+                                  if (_loanFormKey.currentState!.validate()) {
+                                    _loanFormKey.currentState!.save();
+
+                                    String clientId = '${widget.client.id}';
+                                    var date = DateTime.now();
+                                    loan.date = '${date.day} de ${date.month}, ${date.year}';
+
+                                    final loanService = LoanService(db: db);
+                                    loanService.add(clientId, loan);
+
+                                    setState(() {
+                                      getAllLoans(clientId);
+                                    });
+                                
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Prestamo agregado exitosamente.')
+                                      ),
+                                    );
+                                    Navigator.of(context).pop();
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Error al agregar pago.')
+                                    ),
+                                  );
+                                  }
+                                });
+                              },
+                              child: const Text('Aceptar'))
+                        ],
+                      )
+                    ],
+                  ),
+                )),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<dynamic> _buildBottomSheet(loanIndex) => showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        context: context,
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: 190,
+            child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: ListView(
+                  children: [
+                    ListTile(
+                      leading: const Icon(IconlyBold.edit),
+                      title: const Text('Editar'),
+                      subtitle: const Text('Editar este prestamo'),
+                      onTap: () {},
+                    ),
+                    ListTile(
+                      leading: const Icon(IconlyBold.delete),
+                      title: const Text('Borrar'),
+                      subtitle: const Text('Eliminar este prestamo'),
+                      onTap: () {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              title: const Text('Eliminar prestamo'),
+                              content: const Text(
+                                  '¿Seguro que quieres eliminar prestamo?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => {
+                                    Navigator.pop(context, 'Cancel'),
+                                  },
+                                  child: const Text('Cancelar'),
+                                ),
+                                FilledButton(
+                                  style: ButtonStyle(
+                                      shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                              side: const BorderSide(
+                                                  color: Colors.green)))),
+                                  onPressed: () => {
+                                    deleteLoan(widget.client.id ,loans[loanIndex].id),
+                                    getAllLoans(widget.client.id),
+                                    Navigator.pop(context, 'Eliminar'),
+                                    const SnackBar(
+                                      content: Text('Prestamo eliminado'),
+                                    )
+                                  },
+                                  child: const Text('Eliminar'),
+                                ),
+                              ]),
+                        );
+                      },
+                    )
+                  ],
+                )),
+          );
+        },
+      );
 }

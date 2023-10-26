@@ -3,7 +3,7 @@ import 'package:prestamos_app/services/client_service.dart';
 import '../screens/home_page.dart';
 import '../screens/setttings_page.dart';
 import '../screens/clients_page.dart';
-import '../screens/calculator_page.dart';
+import '../screens/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 
@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
   final List<Widget> pages = [
     HomePage(),
     const ClientsPage(),
-    const CalculatorPage(),
+    const SearchPage(),
     const SettingsPage()
   ];
 
@@ -41,18 +41,19 @@ class _HomeState extends State<Home> {
           unselectedFontSize: 11.0,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(IconlyLight.home),
-              activeIcon: Icon(IconlyBold.home), 
+              icon: Icon(IconlyBold.home),
               label: "Inicio"
             ),
             BottomNavigationBarItem(
-              icon: Icon(IconlyLight.user3), 
-              activeIcon: Icon(IconlyBold.user3),
+              icon: Icon(IconlyBold.user3),
               label: "Clientes"
             ),
             BottomNavigationBarItem(
-              icon: Icon(IconlyLight.profile), 
-              activeIcon: Icon(IconlyBold.profile),
+              icon: Icon(IconlyBold.search),
+              label: "Buscar"
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(IconlyBold.setting),
               label: "Ajustes"
             ),
           ],
