@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:prestamos_app/screens/register_page.dart';
-import '../widgets/home.dart';
-import '../widgets/my_button.dart';
-import '../widgets/my_textfield.dart';
+import 'package:prestamos_app/screens/auth_pages/register_page.dart';
+import '../tabs_screen.dart';
+import '../../widgets/my_button.dart';
+import '../../widgets/my_textfield.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
       if (userCredentials != null) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const Home(),
+            builder: (context) => const TabsScreen(),
           ),
         );
       }

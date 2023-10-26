@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/widgets/square_tile.dart';
-import '../widgets/home.dart';
+import '../screens/tabs_screen.dart';
 import '../auth/signin_google.dart';
 
 class SignInWith extends StatefulWidget {
@@ -19,7 +19,7 @@ class _SignInWithState extends State<SignInWith> {
       if (user != null) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const Home(),
+            builder: (context) => const TabsScreen(),
           ),
         );
       }

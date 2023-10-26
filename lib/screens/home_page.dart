@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/models/payment.dart';
-import 'package:prestamos_app/screens/login_page.dart';
+import 'package:prestamos_app/screens/auth_pages/login_page.dart';
 import 'package:prestamos_app/services/client_service.dart';
 import 'package:prestamos_app/services/loan_service.dart';
 import 'package:prestamos_app/services/payment_service.dart';

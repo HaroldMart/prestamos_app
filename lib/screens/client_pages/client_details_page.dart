@@ -1,21 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/models/client.dart';
-import 'package:prestamos_app/screens/clients_page.dart';
-import 'package:prestamos_app/screens/loan_details_page.dart';
+import 'package:prestamos_app/screens/client_pages/clients_page.dart';
+import 'package:prestamos_app/screens/loan_pages/loan_details_page.dart';
 import 'package:prestamos_app/services/client_service.dart';
 import 'package:prestamos_app/services/loan_service.dart';
-import '../models/loan.dart';
+import '../../models/loan.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 
 class ClientDetailsPage extends StatefulWidget {
-  const ClientDetailsPage(this.client, {super.key});
+  ClientDetailsPage( {super.key});
 
-  final Client client;
+  late Client client;
 
   @override
   State<ClientDetailsPage> createState() => _ClientDetailsPage();
+  
 }
 
 class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderStateMixin {
@@ -40,13 +41,15 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
   TextEditingController _monthlyPayment = TextEditingController();
   TextEditingController _totalMonthlyPayment = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    getAllLoans(widget.client.id);
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
+// aqui estana initstate pero como taba haciendo este trote y se eplotaba, lo puse asi porque dijo papu chatgpt
+ @override
+void didChangeDependencies() {
+  super.didChangeDependencies();
+  
+  widget.client = ModalRoute.of(context)!.settings.arguments as Client;
+  getAllLoans(widget.client.id);
+  _tabController = TabController(length: 2, vsync: this);
+}
 
   Future<void> getAllLoans(clientId) async {
     final service = LoanService(db: db);
@@ -75,6 +78,8 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+  
+
     return Scaffold(
       floatingActionButton: ScrollingFabAnimated(
         icon: const Icon(Icons.add, color: Colors.white,),
@@ -410,8 +415,10 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
                                   },
                                 ),
                                 onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (c4ontext) => LoanDetailsPage(widget.client.id, loans[index])));
+                                   Navigator.of(context).pushNamed('/loan_details', arguments: {
+                                      'clientId':widget.client.id,
+                                      'loan': loans[index],
+                                   });
                                 },
                                 onLongPress: () {
                                   _buildBottomSheet(index);
