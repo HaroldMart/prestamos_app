@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/client.dart';
 
 //  FirebaseFirestore db = FirebaseFirestore.instance;
@@ -6,17 +7,28 @@ import '../models/client.dart';
 
 class ClientService {
   FirebaseFirestore db;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   ClientService({required this.db});
 
-  Future<List> getAll() async {
-    final clients = [];
+  Future<List<Client>> getAll() async {
+    List<Client> clients = [];
     final dbRef = db.collection("clients");
 
     try {
       await dbRef.get().then((querySnapshot) {
         for (var docSnapshot in querySnapshot.docs) {
-          clients.add(docSnapshot.data());
+          var clientData = docSnapshot.data();
+          var client = Client(
+            id: clientData['id'],
+            idUser: clientData['idUser'],
+            name: clientData['name'],
+            lastName: clientData['lastName'],
+            phone: clientData['phone'],
+            document: clientData['document'],
+            address: clientData['address'],
+          );
+          clients.add(client);
         }
       });
 
@@ -28,7 +40,7 @@ class ClientService {
     return clients;
   }
 
-  Future<Client> get(clientId) async {
+  Future<Client> get(String clientId) async {
     final docRef = db.collection("clients").doc(clientId);
 
     try {
@@ -36,6 +48,8 @@ class ClientService {
       final data = doc.data() as Map<String, dynamic>;
 
       final client = Client(
+        id: data['id'],
+        idUser: data['idUser'],
         name: data["name"],
         lastName: data["lastName"],
         phone: data["phone"],
@@ -43,12 +57,15 @@ class ClientService {
         address: data["address"],
       );
 
-      print("Getting client document");
+      print('Getting client.');
 
       return client;
     } catch (e) {
       print("Error getting client document: $e");
+
       return Client(
+        id: "",
+        idUser: "",
         name: "",
         lastName: "",
         phone: "",
@@ -58,25 +75,29 @@ class ClientService {
     }
   }
 
-  Future<void> add(client) async {
+  Future<void> add(Client client) async {
     final dbRef = db.collection("clients").withConverter(
           fromFirestore: Client.fromFirestore,
           toFirestore: (Client client, options) => client.toFirestore(),
         );
     try {
-      await dbRef.add(client).then((documentSnapshot) =>
-          print("Added client with ID: ${documentSnapshot.id}"));
+      await dbRef.add(client).then((documentSnapshot) => {
+            documentSnapshot.update({"id": documentSnapshot.id}),
+            print("Added client with ID: ${documentSnapshot.id}"),
+          });
     } catch (e) {
       print("Error adding client: $e");
     }
   }
 
-  Future<void> update(clientId, clientName, clientLastName, clientPhone,
-      clientDocument, clientAddress) async {
+  Future<void> update(String clientId, String userId, String clientName, String clientLastName,
+      String clientPhone, String clientDocument, String clientAddress) async {
     final docRef = db.collection("clients").doc(clientId);
 
     try {
       await docRef.update({
+        "id": clientId,
+        "idUser": userId,
         "name": clientName,
         "lastName": clientLastName,
         "phone": clientPhone,
@@ -88,7 +109,7 @@ class ClientService {
     }
   }
 
-  Future<void> delete(clientId) async {
+  Future<void> delete(String clientId) async {
     final docRef = db.collection("clients").doc(clientId);
 
     try {

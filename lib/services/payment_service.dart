@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/loan.dart';
 import '../models/payment.dart';
 
 //  FirebaseFirestore db = FirebaseFirestore.instance;
@@ -7,11 +6,10 @@ import '../models/payment.dart';
 
 class PaymentService {
   FirebaseFirestore db = FirebaseFirestore.instance;
-
   PaymentService({required this.db});
 
-  Future<List> getAll(clientId, loanId) async {
-    final payments = [];
+  Future<List<Payment_>> getAll(String clientId, String loanId) async {
+    final List<Payment_> payments = [];
     final loanRef = db
         .collection("clients")
         .doc(clientId)
@@ -23,7 +21,14 @@ class PaymentService {
       await loanRef.get().then(
         (querySnapshot) {
           for (var docSnapshot in querySnapshot.docs) {
-            payments.add(docSnapshot.data());
+            var paymentData = docSnapshot.data();
+            var payment = Payment_(
+              loanId: paymentData['loanId'],
+              id: paymentData['id'],
+              mount: paymentData['mount'],
+              date: paymentData['date']
+            );
+            payments.add(payment);
           }
         },
       );
@@ -32,11 +37,10 @@ class PaymentService {
     } catch (e) {
       print("Error getting payments: $e");
     }
-
     return payments;
   }
 
-  Future<Payment_> get(clientId, loanId, paymentId) async {
+  Future<Payment_> get(String clientId, String loanId, String paymentId) async {
     final docRef = db
         .collection("clients")
         .doc(clientId)
@@ -50,7 +54,10 @@ class PaymentService {
       final data = doc.data() as Map<String, dynamic>;
 
       final payment = Payment_(
-          loanId: data["loanId"], mount: data["mount"], date: data["date"]);
+          loanId: data["loanId"],
+          id: data["id"],
+          mount: data["mount"],
+          date: data["date"]);
 
       print("Getting payment document");
 
@@ -62,7 +69,7 @@ class PaymentService {
     return Payment_(loanId: "", mount: 0.0, date: "");
   }
 
-  Future<void> add(clientId, loanId, payment) async {
+  Future<void> add(String clientId, String loanId, Payment_ payment) async {
     final paymentRef = db
         .collection("clients")
         .doc(clientId)
@@ -75,14 +82,17 @@ class PaymentService {
         );
 
     try {
-      await paymentRef.add(payment).then((documentSnapshot) =>
-          print("Added payment with ID: ${documentSnapshot.id}"));
+      await paymentRef.add(payment).then((documentSnapshot) => {
+            documentSnapshot.update({"id": documentSnapshot.id}),
+            print("Added payment with ID: ${documentSnapshot.id}")
+          });
     } catch (e) {
       print("Error adding payment: $e");
     }
   }
 
-  Future<void> update(clientId, loanId, paymentId, mount, date) async {
+  Future<void> update(String clientId, String loanId, String paymentId,
+      double mount, String date) async {
     final docRef = db
         .collection("clients")
         .doc(clientId)
@@ -92,15 +102,18 @@ class PaymentService {
         .doc(paymentId);
 
     try {
-      await docRef
-          .update({"loanId": loanId, "mount": mount, "date": date}).then(
-              (value) => print("Payment updated"));
+      await docRef.update({
+        "loanId": loanId,
+        "id": paymentId,
+        "mount": mount,
+        "date": date
+      }).then((value) => print("Payment updated"));
     } catch (e) {
       print("Error updating payment document $e");
     }
   }
 
-  Future<void> delete(clientId, loanId, paymentId) async {
+  Future<void> delete(String clientId, String loanId, String paymentId) async {
     final docRef = db
         .collection("clients")
         .doc(clientId)

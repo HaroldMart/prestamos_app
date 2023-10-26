@@ -9,15 +9,27 @@ class LoanService {
 
   LoanService({required this.db});
 
-  Future<List> getAll(clientId) async {
-    final loans = [];
+  Future<List<Loan>> getAll(String clientId) async {
+    List<Loan> loans = [];
     final clientRef =
         db.collection("clients").doc(clientId).collection("loans");
 
     try {
       await clientRef.get().then((querySnapshot) {
         for (var docSnapshot in querySnapshot.docs) {
-          loans.add(docSnapshot.data());
+          var loanData = docSnapshot.data();
+          var loan = Loan(
+              clientId: loanData['clientId'],
+              id: loanData["id"],
+              mount: loanData['mount'],
+              interest: loanData['interest'],
+              monthlyPayment: loanData['monthlyPayment'],
+              totalMonthlyPayment: loanData['totalMonthlyPayment'],
+              total: loanData['total'],
+              lateFee: loanData['lateFee'],
+              date: loanData['date'],
+              isPaid: loanData['isPaid']);
+          loans.add(loan);
         }
       });
 
@@ -25,11 +37,10 @@ class LoanService {
     } catch (e) {
       print("Error getting loans: $e");
     }
-
     return loans;
   }
 
-  Future<Loan> get(clientId, loanId) async {
+  Future<Loan> get(String clientId, String loanId) async {
     final docRef =
         db.collection("clients").doc(clientId).collection("loans").doc(loanId);
 
@@ -39,25 +50,24 @@ class LoanService {
 
       final loan = Loan(
           clientId: data["clientId"],
-          clientName: data["clientName"],
+          id: data["id"],
           mount: data["mount"],
           interest: data["interest"],
           monthlyPayment: data["monthlyPayment"],
           totalMonthlyPayment: data["totalMonthlyPayment"],
-           total: data["total"],
+          total: data["total"],
           lateFee: data["lateFee"],
           date: data["date"],
-          payment: data["payment"]);
-
+          isPaid: data["isPaid"]);
       print("Getting loan document");
 
       return loan;
     } catch (e) {
       print("Error getting loan document: $e");
     }
+
     return Loan(
         clientId: "",
-        clientName: "",
         mount: 0.0,
         interest: 0.0,
         monthlyPayment: 0.0,
@@ -65,10 +75,10 @@ class LoanService {
         total: 0.0,
         lateFee: 0,
         date: "",
-        payment: 0.0);
+        isPaid: true);
   }
 
-  Future<void> add(clientId, loan) async {
+  Future<void> add(String clientId, Loan loan) async {
     final clientRef = db
         .collection("clients")
         .doc(clientId)
@@ -79,37 +89,48 @@ class LoanService {
         );
 
     try {
-      await clientRef.add(loan).then((documentSnapshot) =>
-          print("Added loan with ID: ${documentSnapshot.id}"));
+      await clientRef.add(loan).then((documentSnapshot) => {
+            documentSnapshot.update({"id": documentSnapshot.id}),
+            print("Added loan with ID: ${documentSnapshot.id}")
+          });
     } catch (e) {
       print("Error adding loan: $e");
     }
   }
 
-  Future<void> update(clientId, loanId, clientName, mount, interest,
-      monthlyPayment, totalMonthlyPayment, total, lateFee, date, payment) async {
+  Future<void> update(
+      String clientId,
+      String loanId,
+      double mount,
+      double interest,
+      double monthlyPayment,
+      double totalMonthlyPayment,
+      double total,
+      int lateFee,
+      String date,
+      bool isPaid) async {
     final docRef =
         db.collection("clients").doc(clientId).collection("loans").doc(loanId);
 
     try {
       await docRef.update({
         "clientId": clientId,
-        "clientName": clientName,
+        "id": loanId,
         "mount": mount,
         "interest": interest,
         "monthlyPayment": monthlyPayment,
         "totalMonthlyPayment": totalMonthlyPayment,
-         "total": total,
+        "total": total,
         "lateFee": lateFee,
         "date": date,
-        "payment": payment
+        "isPaid": isPaid
       }).then((value) => print("Loan updated"));
     } catch (e) {
       print("Error updating loan document $e");
     }
   }
 
-  Future<void> delete(clientId, loanId) async {
+  Future<void> delete(String clientId, String loanId) async {
     final docRef =
         db.collection("clients").doc(clientId).collection("loans").doc(loanId);
 
