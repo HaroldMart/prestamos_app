@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/models/payment.dart';
 import 'package:prestamos_app/screens/auth_pages/login_page.dart';
@@ -23,7 +26,9 @@ class HomePage extends StatelessWidget {
         ),
       );
     } catch (e) {
-      print("Error al cerrar sesión: $e");
+      if (kDebugMode) {
+        print("Error al cerrar sesión: $e");
+      }
     }
   }
 
