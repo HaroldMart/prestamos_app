@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:prestamos_app/models/client.dart';
-import 'package:prestamos_app/screens/client_pages/client_details_page.dart';
 import '../../services/client_service.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 
@@ -20,7 +19,7 @@ class _ClientsPageState extends State<ClientsPage> {
   FirebaseFirestore db = FirebaseFirestore.instance;
   List<Client> clients = [];
   late Client client = Client(idUser: 'no c', name: 'vidia');
-  final ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {

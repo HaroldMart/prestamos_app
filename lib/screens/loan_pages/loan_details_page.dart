@@ -11,7 +11,7 @@ class LoanDetailsPage extends StatefulWidget {
 
   LoanDetailsPage({super.key});
   
-   String? clientId;
+  String? clientId;
   late Loan loan;
 
   @override
@@ -32,8 +32,13 @@ class _LoanDetailsPage extends State<LoanDetailsPage> {
   );
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+  super.didChangeDependencies();
+    final Map<dynamic, dynamic> arguments = ModalRoute.of(context)?.settings.arguments as Map<dynamic, dynamic>;
+    widget.clientId = arguments['clientId'];
+    widget.loan = arguments['loan'];
+    
+    getAllPayments(widget.clientId, widget.loan.id);
   }
 
   Future<void> getAllPayments(clientId, loanId) async {
@@ -54,11 +59,6 @@ class _LoanDetailsPage extends State<LoanDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> arguments = ModalRoute.of(context)?.settings.arguments as Map<String, Loan>;
-    widget.clientId = arguments['clientId'];
-    widget.loan = arguments['loan'];
-
-    getAllPayments(widget.clientId, widget.loan.id);
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.loan.mount.toString()),

@@ -45,7 +45,6 @@ class _ClientDetailsPage extends State<ClientDetailsPage>  with TickerProviderSt
  @override
 void didChangeDependencies() {
   super.didChangeDependencies();
-  
   widget.client = ModalRoute.of(context)!.settings.arguments as Client;
   getAllLoans(widget.client.id);
   _tabController = TabController(length: 2, vsync: this);
@@ -78,8 +77,6 @@ void didChangeDependencies() {
 
   @override
   Widget build(BuildContext context) {
-  
-
     return Scaffold(
       floatingActionButton: ScrollingFabAnimated(
         icon: const Icon(Icons.add, color: Colors.white,),
