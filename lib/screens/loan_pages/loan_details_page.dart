@@ -10,7 +10,7 @@ import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.da
 class LoanDetailsPage extends StatefulWidget {
 
   LoanDetailsPage({super.key});
-
+  
   String? clientId;
   late Loan loan;
 
