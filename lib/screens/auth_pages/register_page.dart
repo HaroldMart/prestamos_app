@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:prestamos_app/screens/login_page.dart';
+import 'package:prestamos_app/screens/auth_pages/login_page.dart';
 import 'package:prestamos_app/widgets/signInWith.dart';
-import '../widgets/my_button.dart';
-import '../widgets/my_textfield.dart';
+import '../../widgets/my_button.dart';
+import '../../widgets/my_textfield.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);

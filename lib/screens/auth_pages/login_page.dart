@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:prestamos_app/screens/auth_pages/register_page.dart';
-import '../screens/home_page.dart';
-import '../widgets/my_button.dart';
-import '../widgets/my_textfield.dart';
+import '../tabs_screen.dart';
+import '../../widgets/my_button.dart';
+import '../../widgets/my_textfield.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -45,20 +46,25 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordController.text,
       );
 
-      print(userCredentials);
+      if (kDebugMode) {
+        print(userCredentials);
+      }
       if (userCredentials != null) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => HomePage(),
+            builder: (context) => const TabsScreen(),
           ),
         );
       }
     } on FirebaseAuthException catch (e) {
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
       //wrong Email
       showmessage(e.code);
     } catch (error) {
-      print(error);
+      if (kDebugMode) {
+        print(error);
+      }
     }
   }
 

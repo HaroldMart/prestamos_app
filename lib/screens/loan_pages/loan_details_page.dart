@@ -1,20 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:prestamos_app/models/client.dart';
 import 'package:prestamos_app/models/payment.dart';
-import 'package:prestamos_app/services/loan_service.dart';
 import 'package:prestamos_app/services/payment_service.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
-import '../models/loan.dart';
-import '../models/payment.dart';
+import '../../models/loan.dart';
 import 'package:flutter_scrolling_fab_animated/flutter_scrolling_fab_animated.dart';
 
 class LoanDetailsPage extends StatefulWidget {
 
-  const LoanDetailsPage(this.clientId, this.loan, {super.key});
-  final String? clientId;
-  final Loan loan;
+  LoanDetailsPage({super.key});
+  
+  String? clientId;
+  late Loan loan;
 
   @override
   State<LoanDetailsPage> createState() => _LoanDetailsPage();
@@ -25,7 +23,6 @@ class _LoanDetailsPage extends State<LoanDetailsPage> {
   final ScrollController _scrollController = new ScrollController();
   FirebaseFirestore db = FirebaseFirestore.instance;
   List<Payment_> payments = [];
-  late Payment_ loan;
   final GlobalKey<FormState> _loanFormKey = GlobalKey<FormState>();
   TextEditingController _mountController = TextEditingController();
   late Payment_ payment = Payment_(
@@ -35,8 +32,12 @@ class _LoanDetailsPage extends State<LoanDetailsPage> {
   );
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+  super.didChangeDependencies();
+    final Map<dynamic, dynamic> arguments = ModalRoute.of(context)?.settings.arguments as Map<dynamic, dynamic>;
+    widget.clientId = arguments['clientId'];
+    widget.loan = arguments['loan'];
+    
     getAllPayments(widget.clientId, widget.loan.id);
   }
 
