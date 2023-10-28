@@ -2,35 +2,37 @@ import 'package:flutter/material.dart';
 
 class MyTextField extends StatelessWidget {
   final controller;
-  final String hintText;
+  final String placeHolder;
   final bool obscureText;
+  final String label;
 
   const MyTextField({
     super.key,
     required this.controller,
-    required this.hintText,
+    required this.placeHolder,
     required this.obscureText,
+    this.label = "",
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.shade400),
-            ),
-            fillColor: Colors.grey.shade200,
-            filled: true,
-            hintText: hintText,
-            hintStyle: TextStyle(color: Colors.grey[500])),
-      ),
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Color.fromARGB(255, 210, 210, 210)),
+            borderRadius: BorderRadius.circular(8.0)
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Color.fromARGB(255, 88, 63, 255)),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          fillColor: const Color.fromARGB(255, 255, 255, 255),
+          filled: true,
+          label: Text(label, style: const TextStyle(color: Color.fromARGB(255, 177, 177, 177)),),
+          hintText: placeHolder,
+          hintStyle: const TextStyle(color: Color.fromARGB(255, 105, 105, 105))),
     );
   }
 }

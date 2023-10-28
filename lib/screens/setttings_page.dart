@@ -2,49 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:prestamos_app/widgets/settings/settings_option.dart';
-import '../screens/login_page.dart';
-
-// class SettingsPage extends StatelessWidget {
-//   const SettingsPage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-
-//     );
-//     // Padding(
-//     //   padding: const EdgeInsets.all(10.0),
-//     //   child: Column(
-//     //           children: [
-//     //             Container(
-//     //               decoration: BoxDecoration(
-//     //                 color: Colors.white,
-//     //                 borderRadius: BorderRadius.circular(10),
-//     //                 boxShadow: const [
-//     //                   BoxShadow(
-//     //                     color: Color.fromARGB(255, 222, 220, 220),
-//     //                     spreadRadius: 4,
-//     //                     blurRadius: 7,
-//     //                     offset: Offset(0, 2),
-//     //                   )
-//     //                 ]
-//     //               ),
-//     //               child: ListTile(
-//     //                 leading: const Icon(Icons.logout_outlined),
-//     //                 title: const Text('Cerrar sesión'),
-//     //                 subtitle: const Text(''),
-//     //                 onTap: (){
-//     //                   logOut(context);
-//     //                 },
-//     //                 onLongPress: (){},
-//     //               ),
-//     //             ),
-//     //             const SizedBox(height: 15),
-//     //           ]
-//     //   ),
-//     // );
-//   }
-// }
+import '../screens/auth_pages/login_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -155,21 +113,26 @@ class SettingsPage extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            Container(
-                                width: 44,
-                                height: 44,
-                                decoration: ShapeDecoration(
-                                  color: Colors.white
-                                      .withOpacity(0.05000000074505806),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(33),
+                            GestureDetector(
+                              onTap: () {
+                                logOut(context);
+                              },
+                              child: Container(
+                                  width: 44,
+                                  height: 44,
+                                  decoration: ShapeDecoration(
+                                    color: Colors.white
+                                        .withOpacity(0.05000000074505806),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(33),
+                                    ),
                                   ),
-                                ),
-                                child: const Icon(
-                                  Icons.logout_outlined,
-                                  size: 20.0,
-                                  color: Colors.white,
-                                )),
+                                  child: const Icon(
+                                    Icons.logout_outlined,
+                                    size: 20.0,
+                                    color: Colors.white,
+                                  )),
+                            ),
                           ],
                         ),
                       ),
@@ -355,7 +318,6 @@ class SettingsPage extends StatelessWidget {
                                               size: 20.0,
                                             ),
                                           ),
-                                          
                                           SettingOption(
                                             label: "Acerca de",
                                             onTap: () {
@@ -368,7 +330,6 @@ class SettingsPage extends StatelessWidget {
                                               size: 20.0,
                                             ),
                                           ),
-
                                           SettingOption(
                                             label: "Feedback",
                                             onTap: () {
