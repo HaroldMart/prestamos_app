@@ -29,9 +29,12 @@ class _TabsScreenState extends State<TabsScreen> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: const Text("Prestamos App", style: TextStyle(color: Colors.black),),
+          title: const Text(
+            "Prestamos App",
+            style: TextStyle(color: Colors.black),
+          ),
           elevation: 0,
-           automaticallyImplyLeading: true,
+          automaticallyImplyLeading: true,
         ),
         // drawer: CustomDrawer.getDrawer(context),
         body: IndexedStack(index: indexPage, children: pages),
@@ -42,21 +45,13 @@ class _TabsScreenState extends State<TabsScreen> {
           unselectedFontSize: 11.0,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(IconlyBold.home),
-              label: "Inicio"
-            ),
+                icon: Icon(IconlyBold.home), label: "Inicio"),
             BottomNavigationBarItem(
-              icon: Icon(IconlyBold.user3),
-              label: "Clientes"
-            ),
+                icon: Icon(IconlyBold.user3), label: "Clientes"),
             BottomNavigationBarItem(
-              icon: Icon(IconlyBold.search),
-              label: "Buscar"
-            ),
+                icon: Icon(IconlyBold.search), label: "Buscar"),
             BottomNavigationBarItem(
-              icon: Icon(IconlyBold.setting),
-              label: "Ajustes"
-            ),
+                icon: Icon(IconlyBold.setting), label: "Ajustes"),
           ],
           onTap: (index) {
             setState(() {
