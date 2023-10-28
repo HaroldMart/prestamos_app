@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class MyButton extends StatelessWidget {
@@ -11,7 +13,7 @@ class MyButton extends StatelessWidget {
     return GestureDetector(
         onTap: onTap,
         child: Container(
-          width: 350,
+          width: min(double.infinity, 450),
           height: 52,
           padding: const EdgeInsets.all(10),
           clipBehavior: Clip.antiAlias,
